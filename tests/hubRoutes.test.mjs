@@ -4,7 +4,13 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { createServer } from "vite";
-import { emptyHub, demoHub } from "../src/services/hubStore.js";
+import { emptyHub } from "../src/services/hubStore.js";
+import {
+  seedCustomerStore,
+  customerWorkspace,
+} from "../src/services/customerStore.js";
+const demoHub = () =>
+  customerWorkspace(seedCustomerStore(), "CUS-001", "BUS-001");
 const server = await createServer({
   server: { middlewareMode: true },
   appType: "custom",
@@ -27,7 +33,14 @@ const user = {
   email: "sample@example.com",
   businessName: "Test Cafe",
 };
-function render(element, path, authenticated, data = emptyHub()) {
+function render(
+  element,
+  path,
+  authenticated,
+  data = emptyHub(),
+  customer = user,
+  businesses = [],
+) {
   return renderToStaticMarkup(
     h(
       MemoryRouter,
@@ -36,8 +49,11 @@ function render(element, path, authenticated, data = emptyHub()) {
         AuthContext.Provider,
         {
           value: {
-            user: authenticated ? user : null,
+            user: authenticated ? customer : null,
             isAuthenticated: authenticated,
+            businesses,
+            currentBusiness:
+              businesses.find((item) => item.id === data.profile.id) || null,
           },
         },
         h(
@@ -70,6 +86,61 @@ test("every real My Hub route blocks visitors and renders for signed-in users", 
     assert.match(output, /Sign out/, path);
     assert.doesNotMatch(output, /href="\/login"/, path);
     assert.doesNotThrow(() => render(route, url, true, demoHub()), path);
+  }
+});
+
+test("customer routes render each owned business and foreign detail URLs show not found", () => {
+  const root = seedCustomerStore();
+  for (const customer of root.customerUsers) {
+    const businesses = root.businesses.filter(
+      (item) => item.ownerId === customer.id,
+    );
+    for (const business of businesses) {
+      const data = customerWorkspace(root, customer.id, business.id);
+      for (const { path, component: Page, props } of hubRoutes.filter(
+        (route) => !route.path.includes(":id"),
+      )) {
+        const html = render(
+          h(DashboardLayout, null, h(Page, props)),
+          path,
+          true,
+          data,
+          customer,
+          businesses,
+        );
+        assert.match(html, new RegExp(customer.firstName), path);
+        assert.match(html, new RegExp(business.businessName), path);
+        if (customer.id !== "CUS-001")
+          assert.doesNotMatch(
+            html,
+            /Pauline|Harbour Table|APP-2026-2001|APP-2026-2002/,
+            path,
+          );
+        if (business.id === "BUS-004")
+          assert.doesNotMatch(html, /ALC-2026-020|15 Nov 2026/, path);
+        if (path === "/dashboard" && customer.id === "CUS-001")
+          assert.match(html, /816\.50/);
+        if (path === "/documents" && business.id === "BUS-003")
+          assert.match(html, /ALC-2026-020/);
+      }
+      for (const routePath of ["/my-applications/:id", "/forms/:id"]) {
+        const { component: Page } = hubRoutes.find(
+          (route) => route.path === routePath,
+        );
+        const route = h(
+          Routes,
+          null,
+          h(Route, { path: routePath, element: h(Page) }),
+        );
+        const foreignId = routePath.startsWith("/forms")
+          ? "FORM-001"
+          : "APP-2026-2001";
+        const url = routePath.replace(":id", foreignId);
+        const html = render(route, url, true, data, customer, businesses);
+        if (customer.id !== "CUS-001") assert.match(html, /not found/);
+        else assert.match(html, /Food Business Registration/);
+      }
+    }
   }
 });
 test("public informational pages render without authentication", async () => {

@@ -4,18 +4,20 @@ import {
   CASE_STATUSES,
   PRIORITIES,
 } from "../../data/staffRoles";
-import { Field, Select, Button } from "./StaffUI";
-export default function StaffCaseFilters({
+import { useState } from "react";
+import { Field, Select, Button, Dialog } from "./StaffUI";
+function FilterFields({
   filters,
   onChange,
   reports = false,
+  hideSearch = false,
 }) {
   const { data } = useStaffAuth();
   const set = (key, value) => onChange({ ...filters, [key]: value });
   return (
     <div className="mb-5 rounded-xl border border-slate-200 bg-white p-4">
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {!reports && (
+        {!reports && !hideSearch && (
           <Field
             label="Search cases"
             placeholder="Reference, business, applicant or officer"
@@ -119,5 +121,74 @@ export default function StaffCaseFilters({
         </p>
       )}
     </div>
+  );
+}
+
+export default function StaffCaseFilters({
+  filters,
+  onChange,
+  reports = false,
+}) {
+  const [draft, setDraft] = useState(null);
+  const invalid = draft?.from && draft?.to && draft.from > draft.to;
+  const count = Object.entries(filters).filter(
+    ([key, value]) => !["q", "sort"].includes(key) && value,
+  ).length;
+  return (
+    <>
+      <div className="hidden lg:block">
+        <FilterFields filters={filters} onChange={onChange} reports={reports} />
+      </div>
+      <div className="mb-5 space-y-3 lg:hidden">
+        {!reports && (
+          <Field
+            label="Search cases"
+            type="search"
+            placeholder="Reference, business or person"
+            value={filters.q || ""}
+            onChange={(event) =>
+              onChange({ ...filters, q: event.target.value })
+            }
+          />
+        )}
+        <Button
+          secondary
+          aria-haspopup="dialog"
+          onClick={() => setDraft({ ...filters })}
+        >
+          Filters{count ? ` (${count})` : ""}
+        </Button>
+      </div>
+      {draft && (
+        <Dialog
+          title={reports ? "Report filters" : "Case filters"}
+          onClose={() => setDraft(null)}
+        >
+          <FilterFields
+            filters={draft}
+            onChange={setDraft}
+            reports={reports}
+            hideSearch
+          />
+          <div className="flex flex-wrap justify-end gap-2">
+            <Button secondary onClick={() => setDraft({ q: filters.q || "" })}>
+              Clear
+            </Button>
+            <Button secondary onClick={() => setDraft(null)}>
+              Cancel
+            </Button>
+            <Button
+              disabled={Boolean(invalid)}
+              onClick={() => {
+                onChange({ ...draft, q: filters.q || "" });
+                setDraft(null);
+              }}
+            >
+              Apply filters
+            </Button>
+          </div>
+        </Dialog>
+      )}
+    </>
   );
 }

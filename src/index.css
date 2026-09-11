@@ -4,25 +4,158 @@
 
 body {
   @apply bg-background text-gray-800;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
 
-  /* Prevent mobile horizontal overflow */
-  overflow-x: hidden;
+  min-width: 320px;
 }
 
+@layer base {
+  :root {
+    color-scheme: only light;
+    scrollbar-color: #94a3b8 #f5f7fa;
+  }
+  html {
+    @apply bg-background;
+  }
+  :focus-visible {
+    outline: 2px solid #0284c7;
+    outline-offset: 3px;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-slate-400;
+  }
+  input[type="checkbox"],
+  input[type="radio"],
+  progress {
+    accent-color: #0066a1;
+  }
+  main,
+  section,
+  article,
+  fieldset {
+    min-width: 0;
+  }
+}
+
+/* One semantic table and one set of actions; card presentation below desktop. */
+.staff-cell-label {
+  display: none;
+}
+.staff-cell-value {
+  min-width: 0;
+}
+.staff-portal :is(button, summary),
+.staff-portal label:has(input[type="checkbox"]),
+dialog :is(button, summary),
+.staff-login :is(button, summary) {
+  min-height: 44px;
+}
+.staff-portal :is(input[type="checkbox"], input[type="radio"]) {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.staff-portal a {
+  overflow-wrap: anywhere;
+}
+.staff-portal [role="group"] > button {
+  flex-shrink: 0;
+}
+.staff-portal :is(.grid, .flex) > * {
+  min-width: 0;
+}
+.staff-drawer[open] {
+  animation: staff-drawer-enter 180ms ease-out;
+}
+@keyframes staff-drawer-enter {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@media (max-width: 1023px) {
+  .staff-responsive-table {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .staff-responsive-table > div {
+    overflow: visible;
+  }
+  .staff-responsive-table table,
+  .staff-responsive-table tbody {
+    display: block;
+    width: 100%;
+  }
+  .staff-responsive-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .staff-responsive-table tbody > tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border: 1px solid #dce7ef;
+    border-radius: 0.75rem;
+    background: #fff;
+  }
+  .staff-responsive-table td {
+    display: block;
+    min-width: 0;
+    padding: 0.5rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .staff-cell-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+  }
+  .staff-responsive-table .staff-cell-value > * {
+    min-width: 0;
+  }
+  .staff-responsive-table a,
+  .staff-responsive-table button {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .staff-responsive-table td:first-child {
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 0.25rem;
+  }
+}
+@media (min-width: 430px) and (max-width: 1023px) {
+  .staff-responsive-table tbody > tr {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .staff-responsive-table td:first-child,
+  .staff-responsive-table td:last-child {
+    grid-column: 1 / -1;
+  }
+}
 
 /* Better box sizing */
 * {
   box-sizing: border-box;
 }
 
-
 /* Responsive images */
 img {
   max-width: 100%;
   height: auto;
 }
-
 
 /* Hide horizontal scrollbar for mobile nav */
 .scrollbar-hide::-webkit-scrollbar {
@@ -32,7 +165,6 @@ img {
 .scrollbar-hide {
   scrollbar-width: none;
 }
-
 
 /* Mobile text rendering */
 html {
@@ -62,6 +194,9 @@ html {
   }
 
   .page-transition {
+    animation: none;
+  }
+  .staff-drawer[open] {
     animation: none;
   }
 }

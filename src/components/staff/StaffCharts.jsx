@@ -16,12 +16,24 @@ import {
 import { CASE_CATEGORIES, CASE_STATUSES } from "../../data/staffRoles";
 import { groupCases } from "../../utils/staffDataHelpers";
 import { Panel, Empty } from "./StaffUI";
-const colours = ["#008fc9", "#e9a333", "#14a39e", "#8b76c4", "#e06d71"];
+const palette = {
+  text: '#475569',
+  grid: '#e2e8f0',
+  surface: '#ffffff',
+  series: ['#008fc9', '#b7791f', '#0d9488', '#8b76c4', '#e06d71', '#64748b'],
+};
+const tooltipStyle = (palette) => ({
+  backgroundColor: palette.surface,
+  border: `1px solid ${palette.grid}`,
+  color: palette.text,
+  borderRadius: 8,
+});
 export function ReceivedChart({
   rows,
   title = "Applications received",
   period = "Last 30 days",
 }) {
+  const colours = palette.series;
   const total = rows.reduce(
     (sum, row) =>
       sum + CASE_CATEGORIES.reduce((count, key) => count + row[key], 0),
@@ -49,24 +61,37 @@ export function ReceivedChart({
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#e9eef3"
+                stroke={palette.grid}
               />
               <XAxis
                 dataKey="date"
                 tickFormatter={(value) => value.slice(5)}
                 minTickGap={35}
-                tick={{ fontSize: 11 }}
+                tick={{ fontSize: 11, fill: palette.text }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 allowDecimals={false}
-                tick={{ fontSize: 11 }}
+                tick={{ fontSize: 11, fill: palette.text }}
                 axisLine={false}
                 tickLine={false}
               />
-              <Tooltip />
-              <Legend wrapperStyle={{ fontSize: 11, paddingTop: 16 }} />
+              <Tooltip
+                contentStyle={tooltipStyle(palette)}
+                labelStyle={{ color: palette.text }}
+                itemStyle={{ color: palette.text }}
+              />
+              <Legend
+                wrapperStyle={{
+                  fontSize: 11,
+                  paddingTop: 16,
+                  color: palette.text,
+                }}
+                formatter={(value) => (
+                  <span style={{ color: palette.text }}>{value}</span>
+                )}
+              />
               {CASE_CATEGORIES.map((category, index) => (
                 <Line
                   key={category}
@@ -111,6 +136,7 @@ export function ReceivedChart({
   );
 }
 export function StatusChart({ cases, title = "Application status" }) {
+  const colours = palette.series;
   const rows = groupCases(cases, "status", CASE_STATUSES);
   return (
     <Panel title={title}>
@@ -129,18 +155,24 @@ export function StatusChart({ cases, title = "Application status" }) {
                 innerRadius={61}
                 outerRadius={84}
                 paddingAngle={2}
+                stroke={palette.surface}
                 isAnimationActive={false}
               >
                 {rows.map((row, index) => (
                   <Cell key={row.name} fill={colours[index]} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip
+                contentStyle={tooltipStyle(palette)}
+                itemStyle={{ color: palette.text }}
+              />
             </PieChart>
           </ResponsiveContainer>
           <span className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
             <strong className="text-2xl">{cases.length}</strong>
-            <span className="text-xs text-slate-500">applications</span>
+            <span className="text-xs text-slate-500">
+              applications
+            </span>
           </span>
         </div>
       ) : (
@@ -153,7 +185,9 @@ export function StatusChart({ cases, title = "Application status" }) {
               className="h-2.5 w-2.5 rounded-full"
               style={{ backgroundColor: colours[index] }}
             />
-            <span className="text-slate-500">{row.name}</span>
+            <span className="text-slate-500">
+              {row.name}
+            </span>
             <strong className="ml-auto">{row.value}</strong>
           </li>
         ))}
@@ -162,6 +196,7 @@ export function StatusChart({ cases, title = "Application status" }) {
   );
 }
 export function CountChart({ title, rows }) {
+  const colours = palette.series;
   return (
     <Panel title={title}>
       {rows.some((row) => row.value > 0) ? (
@@ -176,17 +211,31 @@ export function CountChart({ title, rows }) {
               margin={{ left: -20, bottom: 15 }}
               accessibilityLayer
             >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke={palette.grid}
+              />
               <XAxis
                 dataKey="name"
-                tick={{ fontSize: 10 }}
+                tick={{ fontSize: 10, fill: palette.text }}
+                stroke={palette.grid}
                 interval={0}
                 tickFormatter={(value) =>
                   value.length > 18 ? `${value.slice(0, 16)}…` : value
                 }
               />
-              <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
-              <Tooltip />
+              <YAxis
+                allowDecimals={false}
+                tick={{ fontSize: 11, fill: palette.text }}
+                stroke={palette.grid}
+              />
+              <Tooltip
+                contentStyle={tooltipStyle(palette)}
+                labelStyle={{ color: palette.text }}
+                itemStyle={{ color: palette.text }}
+                cursor={{ fill: palette.grid, opacity: 0.3 }}
+              />
               <Bar
                 dataKey="value"
                 name="Applications"
@@ -206,7 +255,10 @@ export function CountChart({ title, rows }) {
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
         {rows.map((row) => (
           <span key={row.name}>
-            {row.name}: <strong className="text-slate-700">{row.value}</strong>
+            {row.name}:{" "}
+            <strong className="text-slate-700">
+              {row.value}
+            </strong>
           </span>
         ))}
       </div>

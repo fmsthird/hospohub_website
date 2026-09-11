@@ -9,7 +9,6 @@ import {
   FaBookOpen,
   FaFileAlt,
   FaSearch,
-  FaClipboardCheck,
 } from "react-icons/fa";
 import {
   resources,
@@ -26,7 +25,6 @@ const icons = {
   Food: FaUtensils,
   Alcohol: FaWineGlassAlt,
   "Outdoor Dining": FaUmbrellaBeach,
-  Verification: FaClipboardCheck,
   "Health & Safety": FaShieldAlt,
   "Business & Council": FaBuilding,
   "Planning & Preparation": FaClipboardList,

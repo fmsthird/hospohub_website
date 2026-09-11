@@ -1,7 +1,7 @@
-import EstimatedFees, { FeeGuideLink } from '../components/EstimatedFees';
-import SaveRequirements from '../components/SaveRequirements';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import EstimatedFees, { FeeGuideLink } from "../components/EstimatedFees";
+import SaveRequirements from "../components/SaveRequirements";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   FaArrowLeft,
@@ -16,126 +16,122 @@ import {
   FaUmbrellaBeach,
   FaUsers,
   FaUtensils,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
 const STEPS = [
-  { id: 'details', label: 'Business details' },
-  { id: 'activities', label: 'Activities' },
-  { id: 'programme', label: 'Food programme' },
-  { id: 'alcohol', label: 'Alcohol licence' },
-  { id: 'outdoor', label: 'Outdoor dining' },
-  { id: 'summary', label: 'Summary' },
+  { id: "details", label: "Business details" },
+  { id: "activities", label: "Activities" },
+  { id: "programme", label: "Food programme" },
+  { id: "alcohol", label: "Alcohol licence" },
+  { id: "outdoor", label: "Outdoor dining" },
+  { id: "summary", label: "Summary" },
 ];
 
 const ACTIVITIES = [
   {
-    id: 'prepare',
-    title: 'Prepare food',
-    description: 'e.g. sandwiches, salads',
+    id: "prepare",
+    title: "Prepare food",
+    description: "e.g. sandwiches, salads",
     icon: FaUtensils,
   },
   {
-    id: 'cook',
-    title: 'Cook food',
-    description: 'e.g. meals, baking',
+    id: "cook",
+    title: "Cook food",
+    description: "e.g. meals, baking",
     icon: FaUtensils,
   },
   {
-    id: 'packaged',
-    title: 'Sell packaged food',
-    description: 'e.g. retail food',
+    id: "packaged",
+    title: "Sell packaged food",
+    description: "e.g. retail food",
     icon: FaShoppingBasket,
   },
   {
-    id: 'alcohol',
-    title: 'Sell or serve alcohol',
-    description: 'Alcohol sales or service',
+    id: "alcohol",
+    title: "Sell or serve alcohol",
+    description: "Alcohol sales or service",
     icon: FaGlassMartiniAlt,
   },
   {
-    id: 'outdoor',
-    title: 'Have outdoor dining',
-    description: 'Tables or seating outside',
+    id: "outdoor",
+    title: "Have outdoor dining",
+    description: "Tables or seating outside",
     icon: FaUmbrellaBeach,
   },
   {
-    id: 'events',
-    title: 'Host events',
-    description: 'e.g. functions or events',
+    id: "events",
+    title: "Host events",
+    description: "e.g. functions or events",
     icon: FaUsers,
   },
 ];
 
 const ALCOHOL_OPTIONS = [
   {
-    id: 'on',
-    title: 'For on-site consumption',
-    description: 'e.g. restaurant, bar or cafe',
+    id: "on",
+    title: "For on-site consumption",
+    description: "e.g. restaurant, bar or cafe",
   },
   {
-    id: 'off',
-    title: 'For off-site consumption (takeaway)',
-    description: 'e.g. bottle shop or supermarket',
+    id: "off",
+    title: "For off-site consumption (takeaway)",
+    description: "e.g. bottle shop or supermarket",
   },
   {
-    id: 'club',
-    title: 'Club or membership model',
-    description: 'e.g. sports club or RSA',
+    id: "club",
+    title: "Club or membership model",
+    description: "e.g. sports club or RSA",
   },
   {
-    id: 'special',
-    title: 'Temporary or one-off event',
-    description: 'e.g. festival, market or private event',
+    id: "special",
+    title: "Temporary or one-off event",
+    description: "e.g. festival, market or private event",
   },
   {
-    id: 'none',
-    title: 'Not selling alcohol',
-    description: 'No alcohol licence recommendation',
+    id: "none",
+    title: "Not selling alcohol",
+    description: "No alcohol licence recommendation",
   },
 ];
 
 const inputClass =
-  'w-full rounded-lg border border-[#C7D6E0] bg-white px-4 py-3 text-sm text-[#1F3442] outline-none transition focus:border-secondary focus:ring-2 focus:ring-[#DDF2FC]';
+  "w-full rounded-lg border border-[#C7D6E0] bg-white px-4 py-3 text-sm text-[#1F3442] outline-none transition focus:border-secondary focus:ring-2 focus:ring-[#DDF2FC]";
 
 export default function NewBusiness() {
   const navigate = useNavigate();
 
-  const [current, setCurrent] = useState('details');
+  const [current, setCurrent] = useState("details");
 
   const [business, setBusiness] = useState({
-    name: '',
-    type: '',
-    location: '',
-    openingDate: '',
+    name: "",
+    type: "",
+    location: "",
+    openingDate: "",
   });
 
   const [activities, setActivities] = useState([]);
 
-  const [alcoholUse, setAlcoholUse] = useState('on');
+  const [alcoholUse, setAlcoholUse] = useState("on");
 
-  const [alcoholMainActivity, setAlcoholMainActivity] =
-    useState('part');
+  const [alcoholMainActivity, setAlcoholMainActivity] = useState("part");
 
-  const [outdoorAnswer, setOutdoorAnswer] = useState('yes');
+  const [outdoorAnswer, setOutdoorAnswer] = useState("yes");
 
   const [outdoorLocation, setOutdoorLocation] = useState([]);
 
-  const currentIndex = STEPS.findIndex(
-    (step) => step.id === current,
-  );
+  const currentIndex = STEPS.findIndex((step) => step.id === current);
 
   const hasFood =
-    activities.includes('prepare') ||
-    activities.includes('cook') ||
-    activities.includes('packaged');
+    activities.includes("prepare") ||
+    activities.includes("cook") ||
+    activities.includes("packaged");
 
   const hasPreparedFood =
-    activities.includes('prepare') ||
-    activities.includes('cook');
+    activities.includes("prepare") || activities.includes("cook");
 
-  const hasAlcohol = activities.includes('alcohol');
+  const hasAlcohol = activities.includes("alcohol");
 
-  const hasOutdoor = activities.includes('outdoor');
+  const hasOutdoor = activities.includes("outdoor");
 
   /* =========================================
      FOOD PROGRAMME RECOMMENDATION
@@ -146,18 +142,18 @@ export default function NewBusiness() {
 
     if (hasPreparedFood) {
       return {
-        code: 'TFCP',
-        title: 'Template Food Control Plan (TFCP)',
+        code: "TFCP",
+        title: "Template Food Control Plan (TFCP)",
         description:
-          'Best suited to many cafes, restaurants and similar businesses that prepare and serve food to the public.',
+          "Best suited to many cafes, restaurants and similar businesses that prepare and serve food to the public.",
       };
     }
 
     return {
-      code: 'NP1',
-      title: 'National Programme 1 (NP1)',
+      code: "NP1",
+      title: "National Programme 1 (NP1)",
       description:
-        'A lower-complexity food programme that may suit businesses handling lower-risk packaged food activities.',
+        "A lower-complexity food programme that may suit businesses handling lower-risk packaged food activities.",
     };
   }, [hasFood, hasPreparedFood]);
 
@@ -166,38 +162,35 @@ export default function NewBusiness() {
   ========================================= */
 
   const alcoholLicence = useMemo(() => {
-    if (!hasAlcohol || alcoholUse === 'none') {
+    if (!hasAlcohol || alcoholUse === "none") {
       return null;
     }
 
-    if (alcoholUse === 'off') {
+    if (alcoholUse === "off") {
       return {
-        title: 'Off Licence',
-        description:
-          'For alcohol sold for consumption away from the premises.',
+        title: "Off Licence",
+        description: "For alcohol sold for consumption away from the premises.",
       };
     }
 
-    if (alcoholUse === 'club') {
+    if (alcoholUse === "club") {
       return {
-        title: 'Club Licence',
-        description:
-          'For eligible clubs and member-based organisations.',
+        title: "Club Licence",
+        description: "For eligible clubs and member-based organisations.",
       };
     }
 
-    if (alcoholUse === 'special') {
+    if (alcoholUse === "special") {
       return {
-        title: 'Special Licence',
-        description:
-          'For temporary events or one-off functions.',
+        title: "Special Licence",
+        description: "For temporary events or one-off functions.",
       };
     }
 
     return {
-      title: 'On Licence',
+      title: "On Licence",
       description:
-        'For alcohol consumed on the premises, such as a restaurant, bar or cafe.',
+        "For alcohol consumed on the premises, such as a restaurant, bar or cafe.",
     };
   }, [hasAlcohol, alcoholUse]);
 
@@ -207,9 +200,9 @@ export default function NewBusiness() {
 
   const outdoorApprovalRequired =
     hasOutdoor &&
-    outdoorAnswer === 'yes' &&
-    (outdoorLocation.includes('footpath') ||
-      outdoorLocation.includes('combination'));
+    outdoorAnswer === "yes" &&
+    (outdoorLocation.includes("footpath") ||
+      outdoorLocation.includes("combination"));
 
   /* =========================================
      SUMMARY ITEMS
@@ -220,24 +213,23 @@ export default function NewBusiness() {
 
     if (foodProgramme) {
       items.push({
-        id: 'programme',
+        id: "programme",
         title: foodProgramme.title,
-        subtitle: 'Food safety programme',
+        subtitle: "Food safety programme",
         icon: FaClipboardCheck,
       });
 
       items.push({
-        id: 'registration',
-        title: 'Food Business Registration',
-        subtitle:
-          'Required for the selected food activities',
+        id: "registration",
+        title: "Food Business Registration",
+        subtitle: "Required for the selected food activities",
         icon: FaStore,
       });
     }
 
     if (alcoholLicence) {
       items.push({
-        id: 'alcohol',
+        id: "alcohol",
         title: alcoholLicence.title,
         subtitle: alcoholLicence.description,
         icon: FaGlassMartiniAlt,
@@ -246,20 +238,15 @@ export default function NewBusiness() {
 
     if (outdoorApprovalRequired) {
       items.push({
-        id: 'outdoor',
-        title: 'Outdoor Dining Approval',
-        subtitle:
-          'For outdoor seating on council-managed public space',
+        id: "outdoor",
+        title: "Outdoor Dining Approval",
+        subtitle: "For outdoor seating on council-managed public space",
         icon: FaUmbrellaBeach,
       });
     }
 
     return items;
-  }, [
-    foodProgramme,
-    alcoholLicence,
-    outdoorApprovalRequired,
-  ]);
+  }, [foodProgramme, alcoholLicence, outdoorApprovalRequired]);
 
   /* =========================================
      ESTIMATED FEES
@@ -274,17 +261,13 @@ export default function NewBusiness() {
 
   const toggleActivity = (id) => {
     setActivities((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id],
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
   const toggleOutdoorLocation = (id) => {
     setOutdoorLocation((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id],
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
@@ -293,47 +276,47 @@ export default function NewBusiness() {
   ========================================= */
 
   const next = () => {
-    if (current === 'details') {
-      setCurrent('activities');
+    if (current === "details") {
+      setCurrent("activities");
     }
 
-    if (current === 'activities') {
+    if (current === "activities") {
       if (hasFood) {
-        setCurrent('programme');
+        setCurrent("programme");
       } else if (hasAlcohol) {
-        setCurrent('alcohol');
+        setCurrent("alcohol");
       } else if (hasOutdoor) {
-        setCurrent('outdoor');
+        setCurrent("outdoor");
       } else {
-        setCurrent('summary');
+        setCurrent("summary");
       }
     }
 
-    if (current === 'programme') {
+    if (current === "programme") {
       if (hasAlcohol) {
-        setCurrent('alcohol');
+        setCurrent("alcohol");
       } else if (hasOutdoor) {
-        setCurrent('outdoor');
+        setCurrent("outdoor");
       } else {
-        setCurrent('summary');
+        setCurrent("summary");
       }
     }
 
-    if (current === 'alcohol') {
+    if (current === "alcohol") {
       if (hasOutdoor) {
-        setCurrent('outdoor');
+        setCurrent("outdoor");
       } else {
-        setCurrent('summary');
+        setCurrent("summary");
       }
     }
 
-    if (current === 'outdoor') {
-      setCurrent('summary');
+    if (current === "outdoor") {
+      setCurrent("summary");
     }
 
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -342,58 +325,56 @@ export default function NewBusiness() {
   ========================================= */
 
   const back = () => {
-    if (current === 'details') {
-      navigate('/get-started');
+    if (current === "details") {
+      navigate("/get-started");
     }
 
-    if (current === 'activities') {
-      setCurrent('details');
+    if (current === "activities") {
+      setCurrent("details");
     }
 
-    if (current === 'programme') {
-      setCurrent('activities');
+    if (current === "programme") {
+      setCurrent("activities");
     }
 
-    if (current === 'alcohol') {
-      setCurrent(
-        hasFood ? 'programme' : 'activities',
-      );
+    if (current === "alcohol") {
+      setCurrent(hasFood ? "programme" : "activities");
     }
 
-    if (current === 'outdoor') {
+    if (current === "outdoor") {
       if (hasAlcohol) {
-        setCurrent('alcohol');
+        setCurrent("alcohol");
       } else if (hasFood) {
-        setCurrent('programme');
+        setCurrent("programme");
       } else {
-        setCurrent('activities');
+        setCurrent("activities");
       }
     }
 
-    if (current === 'summary') {
+    if (current === "summary") {
       if (hasOutdoor) {
-        setCurrent('outdoor');
+        setCurrent("outdoor");
       } else if (hasAlcohol) {
-        setCurrent('alcohol');
+        setCurrent("alcohol");
       } else if (hasFood) {
-        setCurrent('programme');
+        setCurrent("programme");
       } else {
-        setCurrent('activities');
+        setCurrent("activities");
       }
     }
 
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
   const isStepApplicable = (id) => {
-    if (id === 'programme') return hasFood;
+    if (id === "programme") return hasFood;
 
-    if (id === 'alcohol') return hasAlcohol;
+    if (id === "alcohol") return hasAlcohol;
 
-    if (id === 'outdoor') return hasOutdoor;
+    if (id === "outdoor") return hasOutdoor;
 
     return true;
   };
@@ -404,11 +385,10 @@ export default function NewBusiness() {
 
       <button
         type="button"
-        onClick={() => navigate('/get-started')}
+        onClick={() => navigate("/get-started")}
         className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[#46606F] transition hover:text-primary"
       >
         <FaArrowLeft className="text-xs" />
-
         Back to Get Started
       </button>
 
@@ -425,11 +405,9 @@ export default function NewBusiness() {
           </h1>
 
           <p className="mt-3 max-w-[760px] text-[15px] leading-6 text-[#607382]">
-            Tell us about your business and planned
-            activities. Hospo Hub will use your answers
-            to show the likely food programme, alcohol
-            licence and outdoor dining approvals you may
-            need.
+            Tell us about your business and planned activities. Hospo Hub will
+            use your answers to show the likely food programme, alcohol licence
+            and outdoor dining approvals you may need.
           </p>
         </div>
 
@@ -453,37 +431,32 @@ export default function NewBusiness() {
           {STEPS.map((step, index) => {
             const active = current === step.id;
             const completed = currentIndex > index;
-            const applicable =
-              isStepApplicable(step.id);
+            const applicable = isStepApplicable(step.id);
 
             return (
               <div
                 key={step.id}
                 className={`relative z-10 flex w-[16.66%] flex-col items-center ${
-                  applicable ? '' : 'opacity-40'
+                  applicable ? "" : "opacity-40"
                 }`}
               >
                 <div
                   className={`flex h-9 w-9 items-center justify-center rounded-full border-2 text-sm font-extrabold ${
                     active
-                      ? 'border-secondary bg-secondary text-white'
+                      ? "border-secondary bg-secondary text-white"
                       : completed
-                        ? 'border-primary bg-primary text-white'
-                        : 'border-[#C7D6E0] bg-white text-[#718493]'
+                        ? "border-primary bg-primary text-white"
+                        : "border-[#C7D6E0] bg-white text-[#718493]"
                   }`}
                 >
-                  {completed ? (
-                    <FaCheck className="text-xs" />
-                  ) : (
-                    index + 1
-                  )}
+                  {completed ? <FaCheck className="text-xs" /> : index + 1}
                 </div>
 
                 <span
                   className={`mt-2 text-center text-[11px] font-semibold ${
                     active
-                      ? 'text-primary'
-                      : 'text-[#6B7F8C]'
+                      ? "text-primary"
+                      : "text-[#6B7F8C]"
                   }`}
                 >
                   {step.label}
@@ -504,7 +477,7 @@ export default function NewBusiness() {
           {/* BUSINESS DETAILS */}
           {/* ======================== */}
 
-          {current === 'details' && (
+          {current === "details" && (
             <>
               <StepHeading
                 eyebrow="Business details"
@@ -518,10 +491,7 @@ export default function NewBusiness() {
                     type="text"
                     value={business.name}
                     onChange={(event) =>
-                      updateBusiness(
-                        'name',
-                        event.target.value,
-                      )
+                      updateBusiness("name", event.target.value)
                     }
                     placeholder="e.g. Ocean View Restaurant"
                     className={inputClass}
@@ -532,26 +502,17 @@ export default function NewBusiness() {
                   <select
                     value={business.type}
                     onChange={(event) =>
-                      updateBusiness(
-                        'type',
-                        event.target.value,
-                      )
+                      updateBusiness("type", event.target.value)
                     }
                     className={inputClass}
                   >
-                    <option value="">
-                      Select business type
-                    </option>
+                    <option value="">Select business type</option>
 
                     <option>Restaurant</option>
                     <option>Cafe</option>
                     <option>Bar or pub</option>
-                    <option>
-                      Takeaway or food shop
-                    </option>
-                    <option>
-                      Food truck / mobile business
-                    </option>
+                    <option>Takeaway or food shop</option>
+                    <option>Food truck / mobile business</option>
                     <option>Catering</option>
                     <option>Other</option>
                   </select>
@@ -565,10 +526,7 @@ export default function NewBusiness() {
                       type="text"
                       value={business.location}
                       onChange={(event) =>
-                        updateBusiness(
-                          'location',
-                          event.target.value,
-                        )
+                        updateBusiness("location", event.target.value)
                       }
                       placeholder="e.g. Mission Bay, Auckland"
                       className={`${inputClass} pl-11`}
@@ -581,10 +539,7 @@ export default function NewBusiness() {
                     type="date"
                     value={business.openingDate}
                     onChange={(event) =>
-                      updateBusiness(
-                        'openingDate',
-                        event.target.value,
-                      )
+                      updateBusiness("openingDate", event.target.value)
                     }
                     className={inputClass}
                   />
@@ -592,9 +547,8 @@ export default function NewBusiness() {
               </div>
 
               <InfoBox>
-                We&apos;ll use your business type and
-                Auckland location to make the later
-                recommendations more relevant.
+                We&apos;ll use your business type and Auckland location to make
+                the later recommendations more relevant.
               </InfoBox>
             </>
           )}
@@ -603,7 +557,7 @@ export default function NewBusiness() {
           {/* BUSINESS ACTIVITIES */}
           {/* ======================== */}
 
-          {current === 'activities' && (
+          {current === "activities" && (
             <>
               <StepHeading
                 eyebrow="Business activities"
@@ -615,32 +569,27 @@ export default function NewBusiness() {
                 {ACTIVITIES.map((item) => {
                   const Icon = item.icon;
 
-                  const selected =
-                    activities.includes(item.id);
+                  const selected = activities.includes(item.id);
 
                   return (
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() =>
-                        toggleActivity(item.id)
-                      }
+                      onClick={() => toggleActivity(item.id)}
                       className={`relative min-h-[165px] rounded-xl border-2 p-5 text-left transition ${
                         selected
-                          ? 'border-secondary bg-[#F1FAFE] shadow-[0_3px_12px_rgba(0,134,201,0.08)]'
-                          : 'border-[#DFE7EC] bg-white hover:border-[#8CCBEA]'
+                          ? "border-secondary bg-[#F1FAFE] shadow-[0_3px_12px_rgba(0,134,201,0.08)]"
+                          : "border-[#DFE7EC] bg-white hover:border-[#8CCBEA]"
                       }`}
                     >
                       <div
                         className={`absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded border-2 ${
                           selected
-                            ? 'border-secondary bg-secondary text-white'
-                            : 'border-[#B6C8D3] bg-white'
+                            ? "border-secondary bg-secondary text-white"
+                            : "border-[#B6C8D3] bg-white"
                         }`}
                       >
-                        {selected && (
-                          <FaCheck className="text-[10px]" />
-                        )}
+                        {selected && <FaCheck className="text-[10px]" />}
                       </div>
 
                       <Icon className="mb-5 text-[30px] text-primary" />
@@ -658,10 +607,9 @@ export default function NewBusiness() {
               </div>
 
               <InfoBox>
-                Based on these selections, we&apos;ll
-                identify the relevant food programme and
-                whether alcohol or outdoor dining
-                approvals should be checked.
+                Based on these selections, we&apos;ll identify the relevant food
+                programme and whether alcohol or outdoor dining approvals should
+                be checked.
               </InfoBox>
             </>
           )}
@@ -670,7 +618,7 @@ export default function NewBusiness() {
           {/* FOOD PROGRAMME */}
           {/* ======================== */}
 
-          {current === 'programme' && (
+          {current === "programme" && (
             <>
               <StepHeading
                 eyebrow="Food programme"
@@ -708,21 +656,18 @@ export default function NewBusiness() {
                 <div className="mt-4 space-y-3">
                   {hasPreparedFood && (
                     <CheckLine>
-                      You selected preparing or cooking
-                      food.
+                      You selected preparing or cooking food.
                     </CheckLine>
                   )}
 
                   <CheckLine>
-                    Your food activities determine the
-                    level of food-safety controls likely
-                    to apply.
+                    Your food activities determine the level of food-safety
+                    controls likely to apply.
                   </CheckLine>
 
                   <CheckLine>
-                    The final programme should be
-                    confirmed against Auckland Council
-                    requirements.
+                    The final programme should be confirmed against Auckland
+                    Council requirements.
                   </CheckLine>
                 </div>
               </div>
@@ -734,9 +679,9 @@ export default function NewBusiness() {
 
                 <div className="grid gap-3">
                   {[
-                    'National Programme 1 (NP1)',
-                    'National Programme 2 (NP2)',
-                    'National Programme 3 (NP3)',
+                    "National Programme 1 (NP1)",
+                    "National Programme 2 (NP2)",
+                    "National Programme 3 (NP3)",
                   ].map((name) => (
                     <div
                       key={name}
@@ -760,7 +705,7 @@ export default function NewBusiness() {
           {/* ALCOHOL LICENSING */}
           {/* ======================== */}
 
-          {current === 'alcohol' && (
+          {current === "alcohol" && (
             <>
               <StepHeading
                 eyebrow="Alcohol licensing"
@@ -770,27 +715,24 @@ export default function NewBusiness() {
 
               <div className="space-y-3">
                 {ALCOHOL_OPTIONS.map((option) => {
-                  const selected =
-                    alcoholUse === option.id;
+                  const selected = alcoholUse === option.id;
 
                   return (
                     <button
                       key={option.id}
                       type="button"
-                      onClick={() =>
-                        setAlcoholUse(option.id)
-                      }
+                      onClick={() => setAlcoholUse(option.id)}
                       className={`flex w-full items-start gap-4 rounded-xl border-2 p-5 text-left transition ${
                         selected
-                          ? 'border-secondary bg-[#F1FAFE]'
-                          : 'border-[#DFE7EC] bg-white hover:border-[#9BCFE8]'
+                          ? "border-secondary bg-[#F1FAFE]"
+                          : "border-[#DFE7EC] bg-white hover:border-[#9BCFE8]"
                       }`}
                     >
                       <div
                         className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 ${
                           selected
-                            ? 'border-secondary bg-secondary'
-                            : 'border-[#AFC2CE] bg-white'
+                            ? "border-secondary bg-secondary"
+                            : "border-[#AFC2CE] bg-white"
                         }`}
                       >
                         {selected && (
@@ -812,32 +754,24 @@ export default function NewBusiness() {
                 })}
               </div>
 
-              {alcoholUse !== 'none' && (
+              {alcoholUse !== "none" && (
                 <div className="mt-6 rounded-xl border border-[#DCE7ED] bg-[#F8FAFB] p-6">
                   <p className="text-sm font-extrabold text-[#304957]">
-                    Will alcohol be the main business
-                    activity or only part of your service?
+                    Will alcohol be the main business activity or only part of
+                    your service?
                   </p>
 
                   <div className="mt-4 flex gap-3">
                     <ChoicePill
-                      selected={
-                        alcoholMainActivity === 'main'
-                      }
-                      onClick={() =>
-                        setAlcoholMainActivity('main')
-                      }
+                      selected={alcoholMainActivity === "main"}
+                      onClick={() => setAlcoholMainActivity("main")}
                     >
                       Main activity
                     </ChoicePill>
 
                     <ChoicePill
-                      selected={
-                        alcoholMainActivity === 'part'
-                      }
-                      onClick={() =>
-                        setAlcoholMainActivity('part')
-                      }
+                      selected={alcoholMainActivity === "part"}
+                      onClick={() => setAlcoholMainActivity("part")}
                     >
                       Part of service
                     </ChoicePill>
@@ -867,7 +801,7 @@ export default function NewBusiness() {
           {/* OUTDOOR DINING */}
           {/* ======================== */}
 
-          {current === 'outdoor' && (
+          {current === "outdoor" && (
             <>
               <StepHeading
                 eyebrow="Outdoor dining"
@@ -882,67 +816,48 @@ export default function NewBusiness() {
 
                 <div className="mt-4 flex gap-3">
                   <ChoicePill
-                    selected={outdoorAnswer === 'yes'}
-                    onClick={() =>
-                      setOutdoorAnswer('yes')
-                    }
+                    selected={outdoorAnswer === "yes"}
+                    onClick={() => setOutdoorAnswer("yes")}
                   >
                     Yes
                   </ChoicePill>
 
                   <ChoicePill
-                    selected={outdoorAnswer === 'no'}
-                    onClick={() =>
-                      setOutdoorAnswer('no')
-                    }
+                    selected={outdoorAnswer === "no"}
+                    onClick={() => setOutdoorAnswer("no")}
                   >
                     No
                   </ChoicePill>
                 </div>
               </div>
 
-              {outdoorAnswer === 'yes' && (
+              {outdoorAnswer === "yes" && (
                 <div className="mt-6 rounded-xl border border-[#DCE6EB] p-6">
                   <p className="text-sm font-extrabold text-[#304957]">
-                    Where will the outdoor dining be
-                    located?
+                    Where will the outdoor dining be located?
                   </p>
 
                   <div className="mt-5 grid gap-3 sm:grid-cols-3">
                     {[
-                      [
-                        'footpath',
-                        'Council footpath',
-                      ],
-                      [
-                        'private',
-                        'Private land / your property',
-                      ],
-                      [
-                        'combination',
-                        'A combination',
-                      ],
+                      ["footpath", "Council footpath"],
+                      ["private", "Private land / your property"],
+                      ["combination", "A combination"],
                     ].map(([id, label]) => {
-                      const selected =
-                        outdoorLocation.includes(id);
+                      const selected = outdoorLocation.includes(id);
 
                       return (
                         <button
                           key={id}
                           type="button"
-                          onClick={() =>
-                            toggleOutdoorLocation(id)
-                          }
+                          onClick={() => toggleOutdoorLocation(id)}
                           className={`rounded-lg border-2 px-4 py-5 text-left text-sm font-bold transition ${
                             selected
-                              ? 'border-secondary bg-[#F1FAFE] text-primary'
-                              : 'border-[#DFE7EC] bg-white text-[#455E6D]'
+                              ? "border-secondary bg-[#F1FAFE] text-primary"
+                              : "border-[#DFE7EC] bg-white text-[#455E6D]"
                           }`}
                         >
                           <div className="mb-3 flex h-5 w-5 items-center justify-center rounded border-2 border-current">
-                            {selected && (
-                              <FaCheck className="text-[9px]" />
-                            )}
+                            {selected && <FaCheck className="text-[9px]" />}
                           </div>
 
                           {label}
@@ -954,9 +869,8 @@ export default function NewBusiness() {
               )}
 
               <InfoBox>
-                Outdoor dining on council-managed public
-                space may require an approval.
-                Private-property requirements can differ.
+                Outdoor dining on council-managed public space may require an
+                approval. Private-property requirements can differ.
               </InfoBox>
             </>
           )}
@@ -965,7 +879,7 @@ export default function NewBusiness() {
           {/* SUMMARY */}
           {/* ======================== */}
 
-          {current === 'summary' && (
+          {current === "summary" && (
             <>
               <StepHeading
                 eyebrow="Summary"
@@ -994,16 +908,21 @@ export default function NewBusiness() {
                         <p className="mt-2 text-sm leading-6 text-[#607382]">
                           {item.subtitle}
                         </p>
-                        <FeeGuideLink category={['programme', 'registration'].includes(item.id) ? 'food' : item.id} />
+                        <FeeGuideLink
+                          category={
+                            ["programme", "registration"].includes(item.id)
+                              ? "food"
+                              : item.id
+                          }
+                        />
                       </div>
                     );
                   })}
                 </div>
               ) : (
                 <div className="rounded-xl border border-[#DCE6EB] bg-[#F8FAFB] p-7 text-sm text-[#607382]">
-                  No licensing recommendation has been
-                  generated from the current activity
-                  selections.
+                  No licensing recommendation has been generated from the
+                  current activity selections.
                 </div>
               )}
 
@@ -1011,9 +930,25 @@ export default function NewBusiness() {
                 food={Boolean(foodProgramme)}
                 alcohol={Boolean(alcoholLicence)}
                 outdoor={outdoorApprovalRequired}
-                specialLicence={alcoholUse === 'special'}
+                specialLicence={alcoholUse === "special"}
               />
-              <SaveRequirements categories={[foodProgramme && 'food', alcoholLicence && 'alcohol', outdoorApprovalRequired && 'outdoor'].filter(Boolean)} business={business} specialLicence={alcoholUse === 'special'} />
+              <SaveRequirements
+                categories={[
+                  foodProgramme && "food",
+                  alcoholLicence && "alcohol",
+                  outdoorApprovalRequired && "outdoor",
+                ].filter(Boolean)}
+                business={business}
+                specialLicence={alcoholUse === "special"}
+                scenario="opening-new-business"
+                answers={{
+                  activities,
+                  alcoholUse,
+                  alcoholMainActivity,
+                  outdoorAnswer,
+                  outdoorLocation,
+                }}
+              />
             </>
           )}
 
@@ -1028,30 +963,25 @@ export default function NewBusiness() {
               className="inline-flex items-center gap-2 rounded-md border border-[#B8CBD6] bg-white px-6 py-3 text-sm font-bold text-[#405966] transition hover:bg-[#F6F9FA]"
             >
               <FaArrowLeft className="text-xs" />
-
               Back
             </button>
 
-            {current !== 'summary' ? (
+            {current !== "summary" ? (
               <button
                 type="button"
                 onClick={next}
                 className="inline-flex items-center gap-3 rounded-md bg-primary px-7 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-secondary"
               >
                 Next
-
                 <FaArrowRight className="text-xs" />
               </button>
             ) : (
               <button
                 type="button"
-                onClick={() =>
-                  navigate('/licensing-guide')
-                }
+                onClick={() => navigate("/licensing-guide")}
                 className="inline-flex items-center gap-3 rounded-md bg-primary px-7 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-secondary"
               >
                 View full details
-
                 <FaArrowRight className="text-xs" />
               </button>
             )}
@@ -1071,18 +1001,12 @@ export default function NewBusiness() {
             <div className="mt-5 space-y-4">
               <SummaryRow
                 label="Business"
-                value={
-                  business.name ||
-                  'Not provided yet'
-                }
+                value={business.name || "Not provided yet"}
               />
 
               <SummaryRow
                 label="Type"
-                value={
-                  business.type ||
-                  'Not selected yet'
-                }
+                value={business.type || "Not selected yet"}
               />
 
               <SummaryRow
@@ -1090,32 +1014,26 @@ export default function NewBusiness() {
                 value={
                   activities.length
                     ? `${activities.length} selected`
-                    : 'None selected yet'
+                    : "None selected yet"
                 }
               />
 
               <SummaryRow
                 label="Food programme"
-                value={
-                  foodProgramme?.code ||
-                  'Not determined'
-                }
+                value={foodProgramme?.code || "Not determined"}
               />
 
               <SummaryRow
                 label="Alcohol"
-                value={
-                  alcoholLicence?.title ||
-                  'Not required / not determined'
-                }
+                value={alcoholLicence?.title || "Not required / not determined"}
               />
 
               <SummaryRow
                 label="Outdoor"
                 value={
                   outdoorApprovalRequired
-                    ? 'Approval likely'
-                    : 'Not determined / may not apply'
+                    ? "Approval likely"
+                    : "Not determined / may not apply"
                 }
               />
             </div>
@@ -1129,9 +1047,8 @@ export default function NewBusiness() {
             </h3>
 
             <p className="mt-2 text-sm leading-6 text-[#607382]">
-              Hospo Hub uses your answers to narrow down
-              the likely approvals. This prototype does
-              not replace a formal Auckland Council
+              Hospo Hub uses your answers to narrow down the likely approvals.
+              This prototype does not replace a formal Auckland Council
               assessment.
             </p>
           </div>
@@ -1145,11 +1062,7 @@ export default function NewBusiness() {
    SMALL COMPONENTS
 ========================================= */
 
-function StepHeading({
-  eyebrow,
-  title,
-  description,
-}) {
+function StepHeading({ eyebrow, title, description }) {
   return (
     <div className="mb-8">
       <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-primary">
@@ -1205,19 +1118,15 @@ function CheckLine({ children }) {
   );
 }
 
-function ChoicePill({
-  selected,
-  onClick,
-  children,
-}) {
+function ChoicePill({ selected, onClick, children }) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`rounded-md border-2 px-5 py-2.5 text-sm font-bold transition ${
         selected
-          ? 'border-primary bg-primary text-white'
-          : 'border-[#C5D5DE] bg-white text-[#455E6D] hover:border-secondary'
+          ? "border-primary bg-primary text-white"
+          : "border-[#C5D5DE] bg-white text-[#455E6D] hover:border-secondary"
       }`}
     >
       {children}

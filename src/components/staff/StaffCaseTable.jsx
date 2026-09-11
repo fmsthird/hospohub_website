@@ -25,7 +25,10 @@ export default function StaffCaseTable({ cases, compact = false }) {
       empty={!cases.length && "No cases found. Try adjusting your filters."}
     >
       {cases.map((item) => (
-        <tr key={item.id} className="hover:bg-slate-50">
+        <tr
+          key={item.id}
+          className="hover:bg-slate-50"
+        >
           <Cell>
             <Link
               to={`/staff/cases/${item.id}`}
@@ -66,7 +69,9 @@ export default function StaffCaseTable({ cases, compact = false }) {
               <Cell>
                 <Badge>{item.priority}</Badge>
               </Cell>
-              <Cell className="min-w-40 text-slate-500">{item.nextAction}</Cell>
+              <Cell className="min-w-40 text-slate-500">
+                {item.nextAction}
+              </Cell>
             </>
           )}
           <Cell>

@@ -56,7 +56,7 @@ function App() {
                   fallback={
                     <div
                       role="status"
-                      className="min-h-screen bg-slate-50 p-8 text-slate-600"
+                      className="min-h-screen bg-background p-8 text-slate-600"
                     >
                       Loading Staff Portal…
                     </div>

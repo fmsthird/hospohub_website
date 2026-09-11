@@ -2,8 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import aucklandLogo from "../assets/logo.svg";
-import AccountActions from './AccountActions';
-import { useAuth } from '../hooks/useAuth';
+import AccountActions from "./AccountActions";
+import { useAuth } from "../hooks/useAuth";
 
 export default function Header() {
   const location = useLocation();
@@ -14,7 +14,9 @@ export default function Header() {
     { name: "Home", path: "/" },
     { name: "Get Started", path: "/get-started" },
     { name: "Licensing Guide", path: "/licensing-guide" },
-    ...(isAuthenticated ? [{ name: 'Requirements', path: '/requirements' }] : []),
+    ...(isAuthenticated
+      ? [{ name: "Requirements", path: "/requirements" }]
+      : []),
 
     { name: "Learning Centre", path: "/learning-centre" },
 
@@ -29,7 +31,6 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
       <div className="mx-auto flex max-w-[1500px] flex-nowrap items-center px-4 py-3 lg:px-8">
-
         {/* LOGO */}
         <Link
           to="/"
@@ -68,7 +69,10 @@ export default function Header() {
         </Link>
 
         {/* DESKTOP NAVIGATION */}
-        <nav aria-label="Main navigation" className={`ml-6 hidden min-w-0 flex-1 flex-nowrap items-center gap-4 ${isAuthenticated ? '2xl:flex' : 'xl:flex'}`}>
+        <nav
+          aria-label="Main navigation"
+          className={`ml-6 hidden min-w-0 flex-1 flex-nowrap items-center gap-4 ${isAuthenticated ? "2xl:flex" : "xl:flex"}`}
+        >
           {menuLinks.map((item) => (
             <Link
               key={item.path}
@@ -88,14 +92,16 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className={`ml-auto hidden shrink-0 ${isAuthenticated ? '2xl:block' : 'xl:block'}`}>
+        <div
+          className={`ml-auto hidden shrink-0 ${isAuthenticated ? "2xl:block" : "xl:block"}`}
+        >
           <AccountActions onNavigate={() => setOpen(false)} />
         </div>
 
         {/* MOBILE MENU BUTTON */}
         <button
           onClick={() => setOpen(!open)}
-          className={`ml-auto p-2 text-xl text-primary ${isAuthenticated ? '2xl:hidden' : 'xl:hidden'}`}
+          className={`ml-auto min-h-11 min-w-11 p-2 text-xl text-primary ${isAuthenticated ? "2xl:hidden" : "xl:hidden"}`}
           aria-label="Menu"
           aria-expanded={open}
           aria-controls="mobile-navigation"
@@ -106,7 +112,10 @@ export default function Header() {
 
       {/* MOBILE MENU */}
       {open && (
-        <div id="mobile-navigation" className={`max-h-[calc(100dvh-80px)] overflow-y-auto border-t bg-white px-4 py-4 shadow-lg ${isAuthenticated ? '2xl:hidden' : 'xl:hidden'}`}>
+        <div
+          id="mobile-navigation"
+          className={`max-h-[calc(100dvh-80px)] overflow-y-auto border-t bg-white px-4 py-4 shadow-lg ${isAuthenticated ? "2xl:hidden" : "xl:hidden"}`}
+        >
           <nav className="flex flex-col gap-1">
             {menuLinks.map((item) => (
               <Link
@@ -123,7 +132,9 @@ export default function Header() {
               </Link>
             ))}
           </nav>
-          <div className="mt-4"><AccountActions mobile onNavigate={() => setOpen(false)} /></div>
+          <div className="mt-4">
+            <AccountActions mobile onNavigate={() => setOpen(false)} />
+          </div>
         </div>
       )}
     </header>

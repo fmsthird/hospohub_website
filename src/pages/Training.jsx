@@ -5,6 +5,7 @@ import { useHub } from "../hooks/useHub";
 import { assignedModules } from "../data/trainingModules";
 import { requirementCategories } from "../services/hubStore";
 import { downloadText } from "../services/documentStore";
+import { reviewTrainingLesson } from "../services/customerActions";
 import {
   ActionLink,
   DateText,
@@ -19,36 +20,7 @@ export default function Training() {
   const [record, setRecord] = useState(null);
   const modules = assignedModules(requirementCategories(data));
   const reviewLesson = (module, index) =>
-    update((state) => {
-      const current = state.training[module.id] || { reviewed: [] };
-      if (current.reviewed.includes(index)) return state;
-      const reviewed = [...current.reviewed, index];
-      const complete = reviewed.length === module.lessons.length;
-      const now = new Date().toISOString();
-      const completionText = `Hospo Hub training completion record\n${module.title}\nParticipant: ${user.firstName} ${user.lastName}\nCompleted: ${new Date(now).toLocaleDateString("en-NZ")}\nSelf-reported review of prototype learning activities. This is not an official regulatory qualification or certificate.`;
-      return {
-        ...state,
-        training: {
-          ...state.training,
-          [module.id]: { reviewed, completedAt: complete ? now : null },
-        },
-        documents: complete
-          ? [
-              ...state.documents.filter(
-                (item) => item.id !== `training-${module.id}`,
-              ),
-              {
-                id: `training-${module.id}`,
-                name: module.title,
-                type: "Training completion records",
-                status: "Completed",
-                uploadedDate: now,
-                completionText,
-              },
-            ]
-          : state.documents,
-      };
-    });
+    update((state) => reviewTrainingLesson(state, module.id, index, user));
   return (
     <>
       <PageHeading
@@ -57,15 +29,18 @@ export default function Training() {
           <ActionLink to="/learning-centre">Reference library</ActionLink>
         }
       >
-        Modules assigned from your saved requirements and applications. These
-        self-guided prototype activities do not replace official training or
-        qualifications.
+        Modules assigned from your business activities, saved requirements and
+        applications. These self-guided prototype activities do not replace
+        official training or qualifications.
       </PageHeading>
       <Panel title="Required Training">
         {!modules.length && (
           <Empty>
             Save your requirements from Get Started to assign relevant modules.{" "}
-            <Link to="/get-started" className="font-bold text-primary">
+            <Link
+              to="/get-started"
+              className="font-bold text-primary"
+            >
               Check requirements →
             </Link>
           </Empty>
@@ -76,8 +51,8 @@ export default function Training() {
             const percent = Math.round(
               (progress.reviewed.length / module.lessons.length) * 100,
             );
-            const completedRecord = data.documents.find(
-              (item) => item.id === `training-${module.id}`,
+            const completedRecord = data.completionRecords.find(
+              (item) => item.moduleId === module.id,
             );
             return (
               <article
@@ -180,7 +155,10 @@ export default function Training() {
       <Panel title="Refresher / renewal training" className="mt-5">
         {modules.length ? (
           [...new Set(modules.map((item) => item.refresher))].map((text) => (
-            <p key={text} className="mb-2 text-sm text-slate-600">
+            <p
+              key={text}
+              className="mb-2 text-sm text-slate-600"
+            >
               {text}
             </p>
           ))

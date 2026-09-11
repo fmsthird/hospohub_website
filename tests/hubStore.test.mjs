@@ -6,8 +6,11 @@ import {
   writeHub,
   submitForm,
   requirementCategories,
-  demoHub,
 } from "../src/services/hubStore.js";
+import {
+  seedCustomerStore,
+  customerWorkspace,
+} from "../src/services/customerStore.js";
 import { assignedModules } from "../src/data/trainingModules.js";
 import { validateUploadFile } from "../src/services/documentStore.js";
 import { authDestination } from "../src/utils/authValidation.js";
@@ -68,13 +71,13 @@ test("training assignment follows saved categories and existing applications", (
   assert.equal(assignedModules([]).length, 0);
   assert.equal(assignedModules(["food", "alcohol", "outdoor"]).length, 8);
 });
-test("sample records are explicitly marked and dates are sourced from existing mock data", () => {
-  const state = demoHub();
+test("sample records are explicitly marked and scoped to Pauline's business", () => {
+  const state = customerWorkspace(seedCustomerStore(), "CUS-001", "BUS-001");
   assert.equal(state.demo, true);
-  assert.equal(state.applications.length, 3);
+  assert.equal(state.applications.length, 2);
   assert.ok(state.applications.every((item) => item.demo));
-  assert.equal(state.documents[0].expiryDate, null);
-  assert.equal(state.payments.length, 0);
+  assert.equal(state.licences[0].expiryDate, null);
+  assert.equal(state.payments.length, 2);
 });
 test("local upload validation rejects oversized, empty and unsupported files", () => {
   assert.equal(

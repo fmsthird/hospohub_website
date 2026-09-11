@@ -7,6 +7,7 @@ import PaymentsFees from "../pages/PaymentsFees";
 import Messages from "../pages/Messages";
 import Training from "../pages/Training";
 import HubSettings from "../pages/HubSettings";
+import CustomerNotifications from "../pages/CustomerNotifications";
 export const hubRoutes = [
   { path: "/dashboard", component: Dashboard },
   { path: "/my-applications", component: MyApplications },
@@ -17,6 +18,7 @@ export const hubRoutes = [
   { path: "/document-upload", component: DocumentUpload },
   { path: "/payments", component: PaymentsFees },
   { path: "/messages", component: Messages },
+  { path: "/notifications", component: CustomerNotifications },
   { path: "/training", component: Training },
   { path: "/profile", component: HubSettings, props: { profile: true } },
   { path: "/settings", component: HubSettings },

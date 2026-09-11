@@ -1,14 +1,24 @@
-import { initialData } from "../data/mockDatabase.js";
-
 export const emptyHub = () => ({
   requirements: null,
   forms: [],
   applications: [],
   documents: [],
+  vaultRecords: [],
+  licences: [],
+  completionRecords: [],
+  notifications: [],
+  reminders: [],
   payments: [],
   messages: [],
   training: {},
-  preferences: { reminders: true },
+  preferences: {
+    reminders: true,
+    emailNotifications: true,
+    applicationUpdates: true,
+    paymentReminders: true,
+    renewalReminders: true,
+    trainingReminders: true,
+  },
   profile: {},
   demo: false,
 });
@@ -50,23 +60,32 @@ export function requirementCategories(data) {
   return [
     ...new Set([
       ...(data.requirements?.categories || []),
+      ...Object.keys(data.profile.activities || {}).filter(
+        (key) => data.profile.activities[key],
+      ),
       ...data.applications.map((item) => item.category),
     ]),
   ].filter((id) => ["food", "alcohol", "outdoor"].includes(id));
 }
 export function submitForm(data, form, now, id) {
-  if (data.applications.some((item) => item.formId === form.id)) return data;
+  const existing = data.applications.find((item) => item.formId === form.id);
+  if (existing && existing.status !== "Draft") return data;
+  id = existing?.id || id;
   const application = {
+    ...existing,
     id,
     formId: form.id,
     category: form.category,
     name: form.name,
     status: "Submitted",
+    progress: 50,
     submittedDate: now,
     lastUpdated: now,
     nextStep: "Prototype submission saved. Nothing has been sent to council.",
     timeline: [
-      { label: "Application started", date: form.createdAt },
+      ...(existing?.timeline || [
+        { label: "Application started", date: form.createdAt },
+      ]),
       { label: "Submitted in prototype", date: now },
     ],
   };
@@ -74,10 +93,20 @@ export function submitForm(data, form, now, id) {
     ...data,
     forms: data.forms.map((item) =>
       item.id === form.id
-        ? { ...form, status: "Submitted", updatedAt: now }
+        ? {
+            ...form,
+            applicationId: id,
+            status: "Submitted",
+            progress: 100,
+            submittedAt: now,
+            updatedAt: now,
+          }
         : item,
     ),
-    applications: [...data.applications, application],
+    applications: [
+      ...data.applications.filter((item) => item.id !== id),
+      application,
+    ],
     payments:
       form.category === "food"
         ? [
@@ -86,60 +115,10 @@ export function submitForm(data, form, now, id) {
               id: `${id}-levy`,
               applicationId: id,
               feeKey: "food.levy",
-              status: "Outstanding",
+              status: "Payment required",
               createdAt: now,
             },
           ]
         : data.payments,
   };
-}
-export function demoHub() {
-  const data = emptyHub();
-  const iso = (value) => {
-    const time = Date.parse(value);
-    return Number.isNaN(time) ? null : new Date(time).toISOString();
-  };
-  data.demo = true;
-  data.requirements = {
-    categories: ["food", "alcohol", "outdoor"],
-    business: { name: "Sample hospitality business" },
-    savedAt: new Date().toISOString(),
-  };
-  data.applications = initialData.applications.map((item, index) => ({
-    id: item.id,
-    name: item.type,
-    category: ["food", "alcohol", "outdoor"][index],
-    status:
-      item.status === "Under Review"
-        ? "In review"
-        : item.status === "Action Required"
-          ? "Action required"
-          : item.status,
-    submittedDate: iso(item.submittedDate),
-    lastUpdated: iso(item.lastUpdate),
-    nextStep: item.nextStep,
-    demo: true,
-    timeline: [
-      { label: "Submitted (sample)", date: iso(item.submittedDate) },
-      { label: item.status, date: iso(item.lastUpdate) },
-    ],
-  }));
-  data.documents = initialData.documents.map((item) => ({
-    id: `sample-${item.id}`,
-    name: item.name,
-    type:
-      item.type === "Licence" ? "Active licences" : "Uploaded business records",
-    status: item.status,
-    expiryDate: iso(item.expiryDate),
-    demo: true,
-  }));
-  data.messages = initialData.messages.map((item) => ({
-    ...item,
-    id: `sample-${item.id}`,
-    date: iso(item.date),
-    applicationId: data.applications[1]?.id,
-    body: "Sample council update: please provide the updated site plan for review. This message is demonstration data.",
-    demo: true,
-  }));
-  return data;
 }

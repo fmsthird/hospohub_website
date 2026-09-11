@@ -16,38 +16,32 @@ import { useHub } from "../hooks/useHub";
 import { Panel, DateText, Empty } from "../components/HubUI";
 import ApplicationTable from "../components/ApplicationTable";
 import skyline from "../assets/auckland-skyline.png";
+import { dashboardCounts } from "../services/customerSelectors";
+import { formatNZD } from "../utils/formatNZD";
 export default function Dashboard() {
   const { user } = useAuth();
   const { data } = useHub();
   const [today] = useState(() => Date.now());
+  const counts = dashboardCounts(data, today);
   const hour = new Date().getHours();
   const greeting =
     hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
   const summaries = [
     [
       "Active applications",
-      data.applications.filter(
-        (item) => !["Approved", "Declined"].includes(item.status),
-      ).length,
+      counts.activeApplications,
       FaRegFileAlt,
       "text-teal-600",
     ],
     [
       "Pending review",
-      data.applications.filter((item) =>
-        ["Submitted", "In review"].includes(item.status),
-      ).length,
+      counts.pendingReview,
       FaRegClock,
       "text-amber-500",
     ],
     [
       "Active licences / approvals",
-      data.documents.filter(
-        (item) =>
-          item.type === "Active licences" &&
-          item.status === "Active" &&
-          (!item.expiryDate || Date.parse(item.expiryDate) >= today),
-      ).length,
+      counts.activeLicences,
       FaRegCheckCircle,
       "text-primary",
     ],
@@ -64,7 +58,9 @@ export default function Dashboard() {
           {greeting}, {user.firstName || "there"}!
         </h1>
         <p className="relative mt-2 text-sm text-slate-600">
-          Here’s an overview of your Hospo Hub account.
+          {data.profile.businessName
+            ? `Here’s an overview of ${data.profile.businessName}.`
+            : "Here’s an overview of your Hospo Hub account."}
         </p>
       </div>
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_250px]">
@@ -103,6 +99,38 @@ export default function Dashboard() {
                 .slice(0, 5)}
             />
           </Panel>
+          <Panel title="Recent activity">
+            {data.applications.length ? (
+              <ul className="space-y-3 text-sm">
+                {data.applications
+                  .flatMap((app) =>
+                    app.timeline.map((event, index) => ({
+                      ...event,
+                      id: `${app.id}-${index}`,
+                      applicationId: app.id,
+                      name: app.name,
+                    })),
+                  )
+                  .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+                  .slice(0, 5)
+                  .map((event) => (
+                    <li key={event.id}>
+                      <Link
+                        to={`/my-applications/${event.applicationId}`}
+                        className="font-semibold text-primary"
+                      >
+                        {event.name}
+                      </Link>
+                      <p className="mt-1 text-slate-600">
+                        {event.label} • <DateText value={event.date} />
+                      </p>
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <Empty>No activity recorded yet.</Empty>
+            )}
+          </Panel>
           <Panel title="Saved requirements">
             {data.requirements ? (
               <>
@@ -127,6 +155,12 @@ export default function Dashboard() {
                   className="mt-4 inline-block text-sm font-bold text-primary"
                 >
                   View assigned training →
+                </Link>
+                <Link
+                  to="/forms"
+                  className="mt-3 block text-sm font-bold text-primary"
+                >
+                  Prepare a form for your business →
                 </Link>
               </>
             ) : (
@@ -159,14 +193,27 @@ export default function Dashboard() {
           </Panel>
           <Panel title="Outstanding fees">
             <strong className="text-2xl">
-              {
-                data.payments.filter((item) => item.status === "Outstanding")
-                  .length
-              }
+              {formatNZD(counts.outstanding)}
             </strong>
             <p className="mt-2 text-sm text-slate-600">
               Prototype payment items awaiting action.
+              {counts.unassessed > 0 &&
+                ` ${counts.unassessed} item(s) still need assessment and are excluded from this total.`}
             </p>
+          </Panel>
+          <Panel title="Keep up to date">
+            <Link
+              to="/messages"
+              className="block text-sm text-primary"
+            >
+              {counts.unreadMessages} unread messages →
+            </Link>
+            <Link
+              to="/training"
+              className="mt-3 block text-sm text-primary"
+            >
+              {counts.requiredTraining} training modules to complete →
+            </Link>
           </Panel>
         </div>
       </div>

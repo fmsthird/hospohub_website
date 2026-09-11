@@ -87,7 +87,9 @@ export default function StaffNotifications() {
                       {formatStaffDate(item.createdAt, true)}
                     </time>
                   </div>
-                  <p className="mt-2 text-sm text-slate-600">{item.message}</p>
+                  <p className="mt-2 text-sm text-slate-600">
+                    {item.message}
+                  </p>
                   <div className="mt-3 flex flex-wrap gap-4 text-xs font-semibold">
                     {!item.read && (
                       <button
@@ -108,7 +110,11 @@ export default function StaffNotifications() {
                         {task ? "View task" : "View case"} →
                       </Link>
                     )}
-                    {item.read && <span className="text-slate-400">Read</span>}
+                    {item.read && (
+                      <span className="text-slate-400">
+                        Read
+                      </span>
+                    )}
                   </div>
                 </div>
               </article>

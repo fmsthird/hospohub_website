@@ -1,5 +1,6 @@
 ﻿import { useEffect, useId, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Children, Fragment, cloneElement, isValidElement } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useStaffAuth } from "../../hooks/useStaffAuth";
 export { PageHeading, Panel, Empty } from "../HubUI";
@@ -31,7 +32,10 @@ export function Field({ label, children, hint, ...props }) {
         />
       )}
       {hint && (
-        <span id={id} className="mt-1 block text-xs font-normal text-slate-500">
+        <span
+          id={id}
+          className="mt-1 block text-xs font-normal text-slate-500"
+        >
           {hint}
         </span>
       )}
@@ -111,7 +115,9 @@ export function Stats({ items }) {
           >
             <span className="flex items-center justify-between gap-2 text-xs font-semibold text-slate-500">
               {label}
-              {Icon && <Icon className="text-lg text-primary" />}
+              {Icon && (
+                <Icon className="text-lg text-primary" />
+              )}
             </span>
             <span className="mt-2 block text-2xl font-bold text-[#173346]">
               {typeof value === "number"
@@ -125,10 +131,33 @@ export function Stats({ items }) {
   );
 }
 export function Table({ headers, children, empty, caption }) {
+  // Keep a single set of rows/actions. At small widths CSS presents them as labelled cards.
+  const flatten = (nodes) =>
+    Children.toArray(nodes).flatMap((node) =>
+      isValidElement(node) && node.type === Fragment
+        ? flatten(node.props.children)
+        : [node],
+    );
+  const rows = Children.map(children, (row) =>
+    isValidElement(row)
+      ? cloneElement(
+          row,
+          {},
+          flatten(row.props.children).map((cell, index) =>
+            isValidElement(cell)
+              ? cloneElement(cell, {
+                  key: cell.key || index,
+                  label: headers[index],
+                })
+              : cell,
+          ),
+        )
+      : row,
+  );
   return (
-    <div className="overflow-hidden rounded-xl border border-[#dde8ef] bg-white shadow-sm">
+    <div className="staff-responsive-table min-w-0 overflow-hidden rounded-xl border border-[#dde8ef] bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
+        <table role="table" className="w-full text-left text-sm">
           <caption className="sr-only">{caption}</caption>
           <thead className="bg-slate-50 text-xs text-slate-600">
             <tr>
@@ -154,7 +183,7 @@ export function Table({ headers, children, empty, caption }) {
                 </td>
               </tr>
             ) : (
-              children
+              rows
             )}
           </tbody>
         </table>
@@ -162,15 +191,22 @@ export function Table({ headers, children, empty, caption }) {
     </div>
   );
 }
-export function Cell({ children, className = "" }) {
-  return <td className={`px-4 py-3 align-top ${className}`}>{children}</td>;
+export function Cell({ children, className = "", label }) {
+  return (
+    <td role="cell" className={`px-4 py-3 align-top ${className}`}>
+      <span aria-hidden="true" className="staff-cell-label">
+        {label}
+      </span>
+      <div className="staff-cell-value">{children}</div>
+    </td>
+  );
 }
 export function Tabs({ items, active, onChange, label = "Views" }) {
   return (
     <div
       role="group"
       aria-label={label}
-      className="mb-5 flex flex-wrap gap-1 border-b border-slate-200 pb-2"
+      className="mb-5 flex max-w-full gap-1 overflow-x-auto whitespace-nowrap border-b border-slate-200 pb-2"
     >
       {items.map((item) => (
         <button
@@ -186,22 +222,48 @@ export function Tabs({ items, active, onChange, label = "Views" }) {
     </div>
   );
 }
-export function Dialog({ title, onClose, children }) {
+export function Dialog({ title, onClose, children, drawer = false, dialogId }) {
   const ref = useRef(null);
   const id = useId();
   const { error } = useStaffAuth();
   useEffect(() => {
     const dialog = ref.current;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     dialog.showModal();
-    return () => dialog.close();
-  }, []);
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => {
+      if (drawer && desktop.matches) dialog.close();
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      desktop.removeEventListener("change", closeOnDesktop);
+      dialog.close();
+    };
+  }, [drawer]);
   return (
     <dialog
       ref={ref}
+      id={dialogId}
       aria-labelledby={id}
       onCancel={onClose}
-      onClose={onClose}
-      className="m-auto max-h-[90dvh] w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-xl border-0 bg-white p-0 text-slate-800 shadow-xl backdrop:bg-slate-950/50"
+      onClose={(event) => {
+        if (!event.currentTarget.open) onClose();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          const bounds = event.currentTarget.getBoundingClientRect();
+          if (
+            event.clientX < bounds.left ||
+            event.clientX > bounds.right ||
+            event.clientY < bounds.top ||
+            event.clientY > bounds.bottom
+          )
+            onClose();
+        }
+      }}
+      className={`${drawer ? "staff-drawer m-0 mr-auto h-dvh max-h-dvh w-[min(20rem,calc(100%-2rem))] rounded-none" : "m-auto max-h-[90dvh] w-[calc(100%-1.5rem)] max-w-xl rounded-xl"} overflow-y-auto border-0 bg-white p-0 text-slate-800 shadow-xl backdrop:bg-black/40`}
     >
       <div className="flex items-center justify-between gap-4 border-b p-5">
         <h2 id={id} className="text-lg font-bold">

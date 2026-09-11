@@ -1,4 +1,8 @@
-import { CATEGORY_HELP, slug } from "./helpCategories.js";
+import {
+  CATEGORY_HELP,
+  FOOD_VERIFICATION_HELP,
+  slug,
+} from "./helpCategories.js";
 
 // One editorial source for the public FAQ library. Product answers describe the
 // current local prototype; regulatory topics link to guides and official resources.
@@ -92,10 +96,10 @@ const sections = {
       "Do not treat a saved form, fee estimate or Hospo Hub result as permission to trade. Confirm with the registration authority what approvals must be in place for your activities before opening. Use the Food guide to prepare the information needed for that discussion.",
     ],
   ],
-  Verification: [
+  FoodVerification: [
     [
       "What is food business verification?",
-      "Verification is an independent check of how your business follows its food safety requirements. It considers the work you actually do, not just whether a plan is on file. Read the Verification guide and arrange the appropriate verifier for your registration pathway.",
+      "Verification is an independent check of how your business follows its food safety requirements. It considers the work you actually do, not just whether a plan is on file. Read the Food guide’s Verification section and arrange the appropriate verifier for your registration pathway.",
     ],
     [
       "Why is verification required?",
@@ -457,7 +461,7 @@ const sections = {
     ],
     [
       "What can I see on the My Hub dashboard?",
-      "The dashboard summarises your saved applications and licence records and offers quick actions. Its counts come from the workspace data, so a new account can start empty. Sample data can be loaded from Settings when the workspace is empty.",
+      "The dashboard summarises your selected business’s applications and licence records and offers quick actions. Its counts come from saved records. New accounts start empty; the fictional demo customers have separate sample businesses and records.",
     ],
     [
       "Where are My Applications?",
@@ -529,10 +533,14 @@ const sections = {
 };
 
 export const helpFaqs = Object.entries(sections).flatMap(
-  ([category, entries]) => {
-    const context = CATEGORY_HELP[category];
+  ([section, entries]) => {
+    const category = section === "FoodVerification" ? "Food Business" : section;
+    const context =
+      section === "FoodVerification"
+        ? FOOD_VERIFICATION_HELP
+        : CATEGORY_HELP[category];
     return entries.map(([question, answer, relatedResourceIds]) => ({
-      id: `${slug(category)}-${slug(question)}`,
+      id: `${section === "FoodVerification" ? "verification" : slug(category)}-${slug(question)}`,
       category,
       service: context.service,
       question,

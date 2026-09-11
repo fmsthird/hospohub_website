@@ -1,14 +1,8 @@
 import { Link } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 
-export default function MobileMenu({
-  open,
-  setOpen,
-  links,
-}) {
-
+export default function MobileMenu({ open, setOpen, links }) {
   if (!open) return null;
-
 
   return (
     <div
@@ -21,7 +15,6 @@ export default function MobileMenu({
       "
       onClick={() => setOpen(false)}
     >
-
       <div
         className="
           absolute
@@ -33,9 +26,8 @@ export default function MobileMenu({
           shadow-xl
           p-5
         "
-        onClick={(e)=>e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
-
         <div
           className="
             flex
@@ -44,28 +36,19 @@ export default function MobileMenu({
             mb-6
           "
         >
+          <h2 className="font-bold text-lg">Menu</h2>
 
-          <h2 className="font-bold text-lg">
-            Menu
-          </h2>
-
-          <button
-            onClick={()=>setOpen(false)}
-            className="text-xl"
-          >
+          <button onClick={() => setOpen(false)} className="text-xl">
             <FaTimes />
           </button>
-
         </div>
 
-
         <nav className="flex flex-col gap-2">
-
-          {links.map((item)=>(
+          {links.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              onClick={()=>setOpen(false)}
+              onClick={() => setOpen(false)}
               className="
                 px-4
                 py-3
@@ -77,12 +60,8 @@ export default function MobileMenu({
               {item.name}
             </Link>
           ))}
-
         </nav>
-
-
       </div>
-
     </div>
   );
 }

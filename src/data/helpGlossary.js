@@ -35,7 +35,7 @@ const terms = [
   ],
   [
     "Corrective action",
-    "Verification",
+    "Food Business",
     "A change made to address a food safety problem and help prevent it happening again. Keep the evidence needed to show your verifier what was done.",
     ["fix", "follow-up", "non-conformance"],
   ],
@@ -155,13 +155,13 @@ const terms = [
   ],
   [
     "Verification",
-    "Verification",
+    "Food Business",
     "An independent check of how a food business implements its food safety requirements. It is a separate process from registration.",
     ["food safety check", "inspection"],
   ],
   [
     "Verifier",
-    "Verification",
+    "Food Business",
     "A person or agency with appropriate recognition to check the relevant type of food business. Confirm that their scope covers your operation before arranging verification.",
     ["recognised verifier", "verification agency"],
   ],

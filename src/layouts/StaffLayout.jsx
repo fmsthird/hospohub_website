@@ -42,6 +42,7 @@ export default function StaffLayout() {
   const { staffUser, hasPermission, data, error } = useStaffAuth();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   useLayoutEffect(() => {
@@ -76,7 +77,7 @@ export default function StaffLayout() {
     </nav>
   );
   return (
-    <div className="min-h-screen bg-[#f3f8fc] text-[#173346] lg:pl-60">
+    <div className="staff-portal min-h-screen min-w-0 bg-[#f3f8fc] text-[#173346] lg:pl-60">
       <a
         href="#staff-main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:p-3"
@@ -96,24 +97,30 @@ export default function StaffLayout() {
         </Link>
         {navigation}
         <div className="mt-auto pt-8 text-xs leading-5 text-slate-300">
-          <p className="border-t border-white/15 pt-4">Auckland Council</p>
+          <p className="border-t border-white/15 pt-4">
+            Auckland Council
+          </p>
           <p>{data.settings.systemName}</p>
           <Link to="/" className="mt-3 inline-block text-sky-200 underline">
             View public website
           </Link>
         </div>
       </aside>
-      <header className="sticky top-0 z-30 flex min-h-20 flex-wrap items-center gap-3 border-b border-[#dde8ef] bg-white px-4 py-3 sm:px-6">
+      <header className="sticky top-0 z-30 flex min-h-20 flex-wrap items-center gap-1 border-b border-[#dde8ef] bg-white px-2 py-3 sm:gap-3 sm:px-6">
         <button
           type="button"
           aria-label="Open staff navigation"
           aria-expanded={open}
+          aria-controls="staff-mobile-navigation"
           onClick={() => setOpen(true)}
-          className="rounded-lg p-2 text-lg lg:hidden"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-lg lg:hidden"
         >
           <FaBars />
         </button>
-        <Link to="/staff" className="font-bold lg:hidden">
+        <Link
+          to="/staff"
+          className="min-w-0 text-sm font-bold sm:text-base lg:hidden"
+        >
           Hospo Hub
         </Link>
         <form
@@ -124,7 +131,8 @@ export default function StaffLayout() {
               `/staff/${hasPermission("cases:view") ? "cases" : "content"}?q=${encodeURIComponent(query.trim())}`,
             );
           }}
-          className="order-last flex w-full items-center rounded-lg border border-slate-200 bg-slate-50 lg:order-none lg:max-w-xl lg:flex-1"
+          id="staff-global-search"
+          className={`${searchOpen ? "flex" : "hidden"} order-last w-full min-w-0 items-center rounded-lg border border-slate-200 bg-slate-50 lg:order-none lg:flex lg:max-w-xl lg:flex-1`}
         >
           <FaSearch className="ml-3 shrink-0 text-slate-400" />
           <input
@@ -145,7 +153,17 @@ export default function StaffLayout() {
             Search
           </button>
         </form>
-        <div className="ml-auto flex items-center gap-2 sm:gap-5">
+        <div className="ml-auto flex shrink-0 items-center gap-0 sm:gap-3">
+          <button
+            type="button"
+            aria-label="Toggle staff search"
+            aria-expanded={searchOpen}
+            aria-controls="staff-global-search"
+            onClick={() => setSearchOpen(!searchOpen)}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-500 lg:hidden"
+          >
+            <FaSearch />
+          </button>
           <Link
             to="/staff/notifications"
             aria-label={`Staff notifications, ${unread} unread`}
@@ -162,13 +180,20 @@ export default function StaffLayout() {
         </div>
       </header>
       {open && (
-        <Dialog title="Staff navigation" onClose={() => setOpen(false)}>
-          <div className="rounded-xl bg-[#063B5A] p-3">{navigation}</div>
+        <Dialog
+          drawer
+          dialogId="staff-mobile-navigation"
+          title="Staff navigation"
+          onClose={() => setOpen(false)}
+        >
+          <div className="rounded-xl bg-[#063B5A] p-3">
+            {navigation}
+          </div>
         </Dialog>
       )}
       <main
         id="staff-main"
-        className="mx-auto max-w-[1700px] p-4 sm:p-6 lg:p-8"
+        className="mx-auto min-w-0 max-w-[1700px] p-4 sm:p-6 lg:p-8"
       >
         <div className="mb-5 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
           <span>

@@ -60,7 +60,9 @@ export default function HelpAssistant() {
                 </div>
 
                 <div>
-                  <p className="text-sm font-bold text-gray-900">Hospo Hub</p>
+                  <p className="text-sm font-bold text-gray-900">
+                    Hospo Hub
+                  </p>
 
                   <p className="mt-2 text-sm leading-6 text-slate-600">
                     {answers[selected].answer}

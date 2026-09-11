@@ -119,7 +119,9 @@ export default function StaffTaskTable({ tasks }) {
       </Table>
       {selected && (
         <Dialog title="Reassign task" onClose={() => setSelected(null)}>
-          <p className="mb-4 text-sm text-slate-500">{selected.title}</p>
+          <p className="mb-4 text-sm text-slate-500">
+            {selected.title}
+          </p>
           <form
             onSubmit={(event) => {
               event.preventDefault();

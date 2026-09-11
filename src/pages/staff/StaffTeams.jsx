@@ -99,7 +99,9 @@ export default function StaffTeams() {
                 </div>
               </summary>
               <div className="space-y-4 border-t bg-slate-50/50 p-4">
-                <p className="text-sm text-slate-500">{team.description}</p>
+                <p className="text-sm text-slate-500">
+                  {team.description}
+                </p>
                 <Table
                   caption={`${team.name} staff workload`}
                   headers={[
@@ -118,7 +120,11 @@ export default function StaffTeams() {
                     return (
                       <tr
                         key={member.id}
-                        className={member.id === memberId ? "bg-sky-50" : ""}
+                        className={
+                          member.id === memberId
+                            ? "bg-sky-50"
+                            : ""
+                        }
                       >
                         <Cell>
                           {hasPermission("users:manage") ? (

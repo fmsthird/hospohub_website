@@ -28,8 +28,8 @@ export const helpAssistantQuestions = [
     question: "Why do I need verification?",
     answer:
       "Registration and verification are separate. Verification checks how your food business puts its food safety requirements into practice.",
-    to: "/licensing-guide?guide=verification",
-    label: "Verification guide",
+    to: "/licensing-guide?guide=food&tab=verification",
+    label: "Food verification guidance",
   },
 
   {

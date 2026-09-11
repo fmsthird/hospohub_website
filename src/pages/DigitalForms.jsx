@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useHub } from "../hooks/useHub";
-import { submitForm } from "../services/hubStore";
+import { submitForm, requirementCategories } from "../services/hubStore";
+import { createDraft, saveDraft } from "../services/customerActions";
 import {
   ActionLink,
   DateText,
@@ -39,16 +40,13 @@ function FormEditor({ form }) {
     }
     const now = new Date().toISOString();
     const updated = { ...values, updatedAt: now };
-    const id = `HH-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
+    const id =
+      form.applicationId ||
+      `HH-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
     const success = update((data) =>
       submit
         ? submitForm(data, updated, now, id)
-        : {
-            ...data,
-            forms: data.forms.map((item) =>
-              item.id === form.id ? updated : item,
-            ),
-          },
+        : saveDraft(data, updated, now),
     );
     if (success && submit) navigate(`/my-applications/${id}`);
     else if (success) setMessage("Draft saved. You can continue it later.");
@@ -59,6 +57,14 @@ function FormEditor({ form }) {
         Prototype digital form. This is not an official council application
         form.
       </p>
+      {form.applicationId && (
+        <Link
+          to={`/my-applications/${form.applicationId}`}
+          className="mb-4 block text-sm font-bold text-primary"
+        >
+          View related application →
+        </Link>
+      )}
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -135,7 +141,9 @@ export default function DigitalForms() {
   const { user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [category, setCategory] = useState("food");
+  const [category, setCategory] = useState(
+    () => requirementCategories(data)[0] || "food",
+  );
   if (id) {
     const form = data.forms.find((item) => item.id === id);
     return (
@@ -159,7 +167,8 @@ export default function DigitalForms() {
       id: formId,
       name: names[category],
       category,
-      status: "Draft",
+      status: "In progress",
+      progress: 0,
       businessName:
         data.profile.businessName ||
         data.requirements?.business?.name ||
@@ -171,7 +180,15 @@ export default function DigitalForms() {
       createdAt: now,
       updatedAt: now,
     };
-    if (update((state) => ({ ...state, forms: [...state.forms, form] })))
+    if (
+      update((state) =>
+        createDraft(
+          state,
+          form,
+          `HH-${crypto.randomUUID().slice(0, 8).toUpperCase()}`,
+        ),
+      )
+    )
       navigate(`/forms/${formId}`);
   };
   return (
@@ -205,13 +222,17 @@ export default function DigitalForms() {
         </div>
       </Panel>
       <div className="mt-5 grid gap-5 lg:grid-cols-2">
-        {["Draft", "Submitted"].map((status) => (
+        {["In progress", "Submitted"].map((status) => (
           <Panel
             key={status}
-            title={status === "Draft" ? "In Progress" : "Submitted"}
+            title={status === "In progress" ? "In Progress" : "Submitted"}
           >
             {data.forms
-              .filter((item) => item.status === status)
+              .filter((item) =>
+                status === "In progress"
+                  ? item.status !== "Submitted"
+                  : item.status === status,
+              )
               .map((form) => (
                 <div key={form.id} className="mb-4 rounded-lg border p-4">
                   <h3 className="font-bold">{form.name}</h3>
@@ -225,13 +246,26 @@ export default function DigitalForms() {
                     to={`/forms/${form.id}`}
                     className="mt-3 inline-block text-sm font-bold text-primary"
                   >
-                    {status === "Draft" ? "Continue" : "View"} →
+                    {status === "In progress" ? "Continue" : "View"} →
                   </Link>
+                  {form.applicationId && (
+                    <Link
+                      to={`/my-applications/${form.applicationId}`}
+                      className="ml-4 text-sm text-primary"
+                    >
+                      Application →
+                    </Link>
+                  )}
                 </div>
               ))}
-            {!data.forms.some((item) => item.status === status) && (
+            {!data.forms.some((item) =>
+              status === "In progress"
+                ? item.status !== "Submitted"
+                : item.status === status,
+            ) && (
               <Empty>
-                No {status === "Draft" ? "in-progress" : "submitted"} forms.
+                No {status === "In progress" ? "in-progress" : "submitted"}{" "}
+                forms.
               </Empty>
             )}
           </Panel>

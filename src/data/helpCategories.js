@@ -1,7 +1,6 @@
 export const HELP_CATEGORIES = [
   "Getting Started",
   "Food Business",
-  "Verification",
   "Alcohol Licensing",
   "Outdoor Dining",
   "Fees & Payments",
@@ -11,13 +10,7 @@ export const HELP_CATEGORIES = [
   "My Hub",
   "Help & Support",
 ];
-export const HELP_SERVICES = [
-  "Food",
-  "Alcohol",
-  "Outdoor dining",
-  "Verification",
-  "General",
-];
+export const HELP_SERVICES = ["Food", "Alcohol", "Outdoor dining", "General"];
 export const slug = (value) =>
   value
     .toLowerCase()
@@ -44,13 +37,6 @@ export const CATEGORY_HELP = {
       "national programme",
       "registration",
     ],
-  },
-  Verification: {
-    service: "Verification",
-    to: "/licensing-guide?guide=verification",
-    label: "Verification guide",
-    resources: ["verification-guide", "verification-preparation"],
-    keywords: ["verifier", "records", "corrective action", "food safety"],
   },
   "Alcohol Licensing": {
     service: "Alcohol",
@@ -108,4 +94,12 @@ export const CATEGORY_HELP = {
     resources: ["resource-library"],
     keywords: ["help", "support", "callback", "assistant"],
   },
+};
+
+export const FOOD_VERIFICATION_HELP = {
+  service: "Food",
+  to: "/licensing-guide?guide=food&tab=verification",
+  label: "Food verification guidance",
+  resources: ["verification-guide", "verification-preparation"],
+  keywords: ["verifier", "records", "corrective action", "food safety"],
 };

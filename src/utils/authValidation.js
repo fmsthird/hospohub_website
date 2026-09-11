@@ -13,7 +13,7 @@ export function validateAuth(values, registering = false) {
 }
 
 export function authDestination(from) {
-  const allowed = ['/dashboard', '/my-applications', '/forms', '/document-upload', '/documents', '/payments', '/messages', '/training', '/profile', '/settings'];
+  const allowed = ['/dashboard', '/my-applications', '/forms', '/document-upload', '/documents', '/payments', '/messages', '/notifications', '/training', '/profile', '/settings'];
   if (typeof from !== 'string') return '/dashboard';
   const path = from.split('?')[0];
   return allowed.includes(path) || /^\/(forms|my-applications)\/[a-zA-Z0-9-]+$/.test(path) ? from : '/dashboard';

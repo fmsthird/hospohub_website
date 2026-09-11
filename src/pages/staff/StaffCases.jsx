@@ -78,7 +78,10 @@ export default function StaffCases() {
         ]}
       />
       <StaffCaseFilters filters={filters} onChange={setFilters} />
-      <p className="mb-3 text-xs text-slate-500" role="status">
+      <p
+        className="mb-3 text-xs text-slate-500"
+        role="status"
+      >
         {cases.length} matching cases · overdue means an open case has a past
         due date or an overdue task.
       </p>

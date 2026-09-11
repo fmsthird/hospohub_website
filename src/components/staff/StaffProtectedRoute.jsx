@@ -14,7 +14,10 @@ export default function StaffProtectedRoute({ permission, children }) {
             Your staff role does not have access to this area. Contact a staff
             administrator if your access needs to change.
           </p>
-          <Link to="/staff" className="font-semibold text-primary">
+          <Link
+            to="/staff"
+            className="font-semibold text-primary"
+          >
             Return to staff dashboard
           </Link>
         </Panel>

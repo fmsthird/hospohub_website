@@ -1,7 +1,7 @@
-import EstimatedFees, { FeeGuideLink } from '../components/EstimatedFees';
-import SaveRequirements from '../components/SaveRequirements';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import EstimatedFees, { FeeGuideLink } from "../components/EstimatedFees";
+import SaveRequirements from "../components/SaveRequirements";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   FaArrowLeft,
@@ -15,66 +15,66 @@ import {
   FaUmbrellaBeach,
   FaUtensils,
   FaUserEdit,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
 const STEPS = [
-  { id: 'details', label: 'Business details' },
-  { id: 'approvals', label: 'Existing approvals' },
-  { id: 'changes', label: 'Changes' },
-  { id: 'requirements', label: 'Requirements' },
-  { id: 'summary', label: 'Summary' },
+  { id: "details", label: "Business details" },
+  { id: "approvals", label: "Existing approvals" },
+  { id: "changes", label: "Changes" },
+  { id: "requirements", label: "Requirements" },
+  { id: "summary", label: "Summary" },
 ];
 
 const CHANGE_OPTIONS = [
   {
-    id: 'owner',
-    title: 'Change of owner',
-    description: 'Transfer the business to a new owner.',
+    id: "owner",
+    title: "Change of owner",
+    description: "Transfer the business to a new owner.",
   },
   {
-    id: 'name',
-    title: 'New business name',
-    description: 'Change the trading or registered business name.',
+    id: "name",
+    title: "New business name",
+    description: "Change the trading or registered business name.",
   },
   {
-    id: 'food',
-    title: 'New menu / food activities',
-    description: 'Change the way food is prepared, handled or sold.',
+    id: "food",
+    title: "New menu / food activities",
+    description: "Change the way food is prepared, handled or sold.",
   },
   {
-    id: 'hours',
-    title: 'Change trading hours',
-    description: 'Open earlier, later or on different days.',
+    id: "hours",
+    title: "Change trading hours",
+    description: "Open earlier, later or on different days.",
   },
   {
-    id: 'alcohol',
-    title: 'Add or remove alcohol',
-    description: 'Change how alcohol is sold or served.',
+    id: "alcohol",
+    title: "Add or remove alcohol",
+    description: "Change how alcohol is sold or served.",
   },
   {
-    id: 'outdoor',
-    title: 'Add outdoor dining',
-    description: 'Introduce outdoor tables or seating.',
+    id: "outdoor",
+    title: "Add outdoor dining",
+    description: "Introduce outdoor tables or seating.",
   },
   {
-    id: 'layout',
-    title: 'Renovations / layout changes',
-    description: 'Make physical changes to the premises.',
+    id: "layout",
+    title: "Renovations / layout changes",
+    description: "Make physical changes to the premises.",
   },
 ];
 
 const inputClass =
-  'w-full rounded-lg border border-[#C5D5DE] bg-white px-4 py-3 text-sm text-[#203746] outline-none transition focus:border-[#0086C9] focus:ring-2 focus:ring-[#DDF2FC]';
+  "w-full rounded-lg border border-[#C5D5DE] bg-white px-4 py-3 text-sm text-[#203746] outline-none transition focus:border-[#0086C9] focus:ring-2 focus:ring-[#DDF2FC]";
 
 export default function BuyingBusiness() {
   const navigate = useNavigate();
 
-  const [current, setCurrent] = useState('details');
+  const [current, setCurrent] = useState("details");
 
   const [business, setBusiness] = useState({
-    name: '',
-    owner: '',
-    type: '',
+    name: "",
+    owner: "",
+    type: "",
   });
 
   const [approvals, setApprovals] = useState({
@@ -84,14 +84,9 @@ export default function BuyingBusiness() {
     outdoorDining: false,
   });
 
-  const [changes, setChanges] = useState([
-    'owner',
-    'hours',
-  ]);
+  const [changes, setChanges] = useState(["owner", "hours"]);
 
-  const currentIndex = STEPS.findIndex(
-    (step) => step.id === current,
-  );
+  const currentIndex = STEPS.findIndex((step) => step.id === current);
 
   const updateBusiness = (field, value) => {
     setBusiness((previous) => ({
@@ -118,63 +113,57 @@ export default function BuyingBusiness() {
   const requirements = useMemo(() => {
     const items = [];
 
-    if (changes.includes('owner')) {
+    if (changes.includes("owner")) {
       items.push({
-        id: 'ownership',
-        title: 'Update ownership details',
+        id: "ownership",
+        title: "Update ownership details",
         description:
-          'Council records and relevant registrations may need to be updated for the new owner.',
+          "Council records and relevant registrations may need to be updated for the new owner.",
         icon: FaUserEdit,
       });
     }
 
     if (
       approvals.alcoholLicence &&
-      (changes.includes('owner') ||
-        changes.includes('alcohol') ||
-        changes.includes('hours'))
+      (changes.includes("owner") ||
+        changes.includes("alcohol") ||
+        changes.includes("hours"))
     ) {
       items.push({
-        id: 'alcohol',
-        title: 'Update alcohol licence information',
+        id: "alcohol",
+        title: "Update alcohol licence information",
         description:
-          'Your existing alcohol licence should be reviewed to confirm what needs to change.',
+          "Your existing alcohol licence should be reviewed to confirm what needs to change.",
         icon: FaGlassMartiniAlt,
       });
     }
 
-    if (changes.includes('hours')) {
+    if (changes.includes("hours")) {
       items.push({
-        id: 'hours',
-        title: 'Review trading hours',
+        id: "hours",
+        title: "Review trading hours",
         description:
-          'Confirm whether your proposed trading hours affect any existing approvals or licence conditions.',
+          "Confirm whether your proposed trading hours affect any existing approvals or licence conditions.",
         icon: FaClipboardCheck,
       });
     }
 
-    if (
-      approvals.foodRegistration ||
-      approvals.foodProgramme
-    ) {
+    if (approvals.foodRegistration || approvals.foodProgramme) {
       items.push({
-        id: 'food',
-        title: 'Reconfirm food programme details',
+        id: "food",
+        title: "Reconfirm food programme details",
         description:
-          'Check that the current food registration and food programme remain suitable after the business changes.',
+          "Check that the current food registration and food programme remain suitable after the business changes.",
         icon: FaUtensils,
       });
     }
 
-    if (
-      changes.includes('outdoor') ||
-      approvals.outdoorDining
-    ) {
+    if (changes.includes("outdoor") || approvals.outdoorDining) {
       items.push({
-        id: 'outdoor',
-        title: 'Review outdoor dining approval',
+        id: "outdoor",
+        title: "Review outdoor dining approval",
         description:
-          'Outdoor seating may require an existing approval to be transferred, updated or reapplied for.',
+          "Outdoor seating may require an existing approval to be transferred, updated or reapplied for.",
         icon: FaUmbrellaBeach,
       });
     }
@@ -183,27 +172,23 @@ export default function BuyingBusiness() {
   }, [changes, approvals]);
 
   const next = () => {
-    const index = STEPS.findIndex(
-      (step) => step.id === current,
-    );
+    const index = STEPS.findIndex((step) => step.id === current);
 
     if (index < STEPS.length - 1) {
       setCurrent(STEPS[index + 1].id);
 
       window.scrollTo({
         top: 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
 
   const back = () => {
-    const index = STEPS.findIndex(
-      (step) => step.id === current,
-    );
+    const index = STEPS.findIndex((step) => step.id === current);
 
     if (index === 0) {
-      navigate('/get-started');
+      navigate("/get-started");
       return;
     }
 
@@ -211,7 +196,7 @@ export default function BuyingBusiness() {
 
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -221,7 +206,7 @@ export default function BuyingBusiness() {
 
       <button
         type="button"
-        onClick={() => navigate('/get-started')}
+        onClick={() => navigate("/get-started")}
         className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[#46606F] transition hover:text-primary"
       >
         <FaArrowLeft className="text-xs" />
@@ -241,9 +226,8 @@ export default function BuyingBusiness() {
           </h1>
 
           <p className="mt-3 max-w-[760px] text-[15px] leading-6 text-[#607382]">
-            Tell us what approvals the business already has
-            and what you plan to change. We&apos;ll help
-            identify which registrations, licences and
+            Tell us what approvals the business already has and what you plan to
+            change. We&apos;ll help identify which registrations, licences and
             approvals should be reviewed.
           </p>
         </div>
@@ -290,24 +274,20 @@ export default function BuyingBusiness() {
                 <div
                   className={`flex h-9 w-9 items-center justify-center rounded-full border-2 text-sm font-extrabold transition ${
                     active
-                      ? 'border-[#0086C9] bg-[#0086C9] text-white'
+                      ? "border-[#0086C9] bg-[#0086C9] text-white"
                       : complete
-                        ? 'border-[#0066A1] bg-[#0066A1] text-white'
-                        : 'border-[#C7D6E0] bg-white text-[#718493]'
+                        ? "border-[#0066A1] bg-[#0066A1] text-white"
+                        : "border-[#C7D6E0] bg-white text-[#718493]"
                   }`}
                 >
-                  {complete ? (
-                    <FaCheck className="text-xs" />
-                  ) : (
-                    index + 1
-                  )}
+                  {complete ? <FaCheck className="text-xs" /> : index + 1}
                 </div>
 
                 <span
                   className={`mt-2 text-center text-[11px] font-semibold ${
                     active
-                      ? 'text-primary'
-                      : 'text-[#6B7F8C]'
+                      ? "text-primary"
+                      : "text-[#6B7F8C]"
                   }`}
                 >
                   {step.label}
@@ -326,7 +306,7 @@ export default function BuyingBusiness() {
           {/* STEP 1 */}
           {/* ===================== */}
 
-          {current === 'details' && (
+          {current === "details" && (
             <>
               <StepHeading
                 eyebrow="Business details"
@@ -340,10 +320,7 @@ export default function BuyingBusiness() {
                     type="text"
                     value={business.name}
                     onChange={(event) =>
-                      updateBusiness(
-                        'name',
-                        event.target.value,
-                      )
+                      updateBusiness("name", event.target.value)
                     }
                     placeholder="e.g. The Bay Bistro"
                     className={inputClass}
@@ -355,10 +332,7 @@ export default function BuyingBusiness() {
                     type="text"
                     value={business.owner}
                     onChange={(event) =>
-                      updateBusiness(
-                        'owner',
-                        event.target.value,
-                      )
+                      updateBusiness("owner", event.target.value)
                     }
                     placeholder="e.g. John Smith"
                     className={inputClass}
@@ -369,16 +343,11 @@ export default function BuyingBusiness() {
                   <select
                     value={business.type}
                     onChange={(event) =>
-                      updateBusiness(
-                        'type',
-                        event.target.value,
-                      )
+                      updateBusiness("type", event.target.value)
                     }
                     className={inputClass}
                   >
-                    <option value="">
-                      Select business type
-                    </option>
+                    <option value="">Select business type</option>
 
                     <option>Restaurant</option>
                     <option>Cafe</option>
@@ -392,9 +361,9 @@ export default function BuyingBusiness() {
               </div>
 
               <InfoBox>
-                We&apos;ll use these details together with
-                the existing approvals to determine what
-                may need to be transferred or updated.
+                We&apos;ll use these details together with the existing
+                approvals to determine what may need to be transferred or
+                updated.
               </InfoBox>
             </>
           )}
@@ -403,7 +372,7 @@ export default function BuyingBusiness() {
           {/* STEP 2 */}
           {/* ===================== */}
 
-          {current === 'approvals' && (
+          {current === "approvals" && (
             <>
               <StepHeading
                 eyebrow="Existing approvals"
@@ -416,43 +385,34 @@ export default function BuyingBusiness() {
                   icon={FaUtensils}
                   title="Food Business Registration"
                   checked={approvals.foodRegistration}
-                  onChange={() =>
-                    toggleApproval('foodRegistration')
-                  }
+                  onChange={() => toggleApproval("foodRegistration")}
                 />
 
                 <ApprovalRow
                   icon={FaClipboardCheck}
                   title="Food Programme (e.g. TFCP)"
                   checked={approvals.foodProgramme}
-                  onChange={() =>
-                    toggleApproval('foodProgramme')
-                  }
+                  onChange={() => toggleApproval("foodProgramme")}
                 />
 
                 <ApprovalRow
                   icon={FaGlassMartiniAlt}
                   title="Alcohol Licence"
                   checked={approvals.alcoholLicence}
-                  onChange={() =>
-                    toggleApproval('alcoholLicence')
-                  }
+                  onChange={() => toggleApproval("alcoholLicence")}
                 />
 
                 <ApprovalRow
                   icon={FaUmbrellaBeach}
                   title="Outdoor Dining Approval"
                   checked={approvals.outdoorDining}
-                  onChange={() =>
-                    toggleApproval('outdoorDining')
-                  }
+                  onChange={() => toggleApproval("outdoorDining")}
                 />
               </div>
 
               <InfoBox>
-                If you&apos;re unsure about an approval,
-                leave it switched off for now. The final
-                details should be confirmed with Auckland
+                If you&apos;re unsure about an approval, leave it switched off
+                for now. The final details should be confirmed with Auckland
                 Council.
               </InfoBox>
             </>
@@ -462,7 +422,7 @@ export default function BuyingBusiness() {
           {/* STEP 3 */}
           {/* ===================== */}
 
-          {current === 'changes' && (
+          {current === "changes" && (
             <>
               <StepHeading
                 eyebrow="Changes"
@@ -472,32 +432,27 @@ export default function BuyingBusiness() {
 
               <div className="grid grid-cols-2 gap-4">
                 {CHANGE_OPTIONS.map((option) => {
-                  const selected =
-                    changes.includes(option.id);
+                  const selected = changes.includes(option.id);
 
                   return (
                     <button
                       key={option.id}
                       type="button"
-                      onClick={() =>
-                        toggleChange(option.id)
-                      }
+                      onClick={() => toggleChange(option.id)}
                       className={`relative min-h-[120px] rounded-xl border-2 p-5 text-left transition ${
                         selected
-                          ? 'border-[#0086C9] bg-[#F1FAFE]'
-                          : 'border-[#DFE7EC] bg-white hover:border-[#8CCBEA]'
+                          ? "border-[#0086C9] bg-[#F1FAFE]"
+                          : "border-[#DFE7EC] bg-white hover:border-[#8CCBEA]"
                       }`}
                     >
                       <div
                         className={`absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded border-2 ${
                           selected
-                            ? 'border-[#0086C9] bg-[#0086C9] text-white'
-                            : 'border-[#B6C8D3] bg-white'
+                            ? "border-[#0086C9] bg-[#0086C9] text-white"
+                            : "border-[#B6C8D3] bg-white"
                         }`}
                       >
-                        {selected && (
-                          <FaCheck className="text-[10px]" />
-                        )}
+                        {selected && <FaCheck className="text-[10px]" />}
                       </div>
 
                       <h3 className="pr-10 text-sm font-extrabold text-[#102B3A]">
@@ -518,7 +473,7 @@ export default function BuyingBusiness() {
           {/* STEP 4 */}
           {/* ===================== */}
 
-          {current === 'requirements' && (
+          {current === "requirements" && (
             <>
               <StepHeading
                 eyebrow="Your requirements"
@@ -561,11 +516,9 @@ export default function BuyingBusiness() {
                 <FaInfoCircle className="mt-1 shrink-0 text-primary" />
 
                 <p className="text-sm leading-6 text-[#526A78]">
-                  Existing licences may sometimes remain
-                  relevant after a business sale, but
-                  ownership, licence details or conditions
-                  may still need to be reviewed and
-                  updated.
+                  Existing licences may sometimes remain relevant after a
+                  business sale, but ownership, licence details or conditions
+                  may still need to be reviewed and updated.
                 </p>
               </div>
             </>
@@ -575,7 +528,7 @@ export default function BuyingBusiness() {
           {/* STEP 5 */}
           {/* ===================== */}
 
-          {current === 'summary' && (
+          {current === "summary" && (
             <>
               <StepHeading
                 eyebrow="Summary"
@@ -591,13 +544,11 @@ export default function BuyingBusiness() {
 
                   <div>
                     <h3 className="text-xl font-extrabold text-[#071B2B]">
-                      {business.name ||
-                        'Business name not provided'}
+                      {business.name || "Business name not provided"}
                     </h3>
 
                     <p className="mt-1 text-sm text-[#607382]">
-                      {business.type ||
-                        'Business type not selected'}
+                      {business.type || "Business type not selected"}
                     </p>
 
                     {business.owner && (
@@ -624,7 +575,9 @@ export default function BuyingBusiness() {
 
                       <div className="text-sm font-semibold text-[#405966]">
                         {item.title}
-                        <div><FeeGuideLink category={item.id} /></div>
+                        <div>
+                          <FeeGuideLink category={item.id} />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -632,14 +585,20 @@ export default function BuyingBusiness() {
               </div>
 
               <EstimatedFees
-                food={requirements.some((item) => item.id === 'food')}
-                alcohol={requirements.some((item) => item.id === 'alcohol')}
-                outdoor={requirements.some((item) => item.id === 'outdoor')}
+                food={requirements.some((item) => item.id === "food")}
+                alcohol={requirements.some((item) => item.id === "alcohol")}
+                outdoor={requirements.some((item) => item.id === "outdoor")}
                 review
               />
-              <SaveRequirements categories={requirements.map((item) => item.id).filter((id) => ['food', 'alcohol', 'outdoor'].includes(id))} business={business} />
+              <SaveRequirements
+                categories={requirements
+                  .map((item) => item.id)
+                  .filter((id) => ["food", "alcohol", "outdoor"].includes(id))}
+                business={business}
+                scenario="buying-existing-business"
+                answers={{ approvals, changes }}
+              />
               <div className="mt-7">
-
                 <div className="rounded-xl border border-[#D7E9F4] bg-[#F2F9FD] p-6">
                   <FaCheckCircle className="text-2xl text-primary" />
 
@@ -648,9 +607,8 @@ export default function BuyingBusiness() {
                   </h3>
 
                   <p className="mt-2 text-sm leading-6 text-[#607382]">
-                    Review the detailed guidance for
-                    each registration and approval before
-                    submitting updates.
+                    Review the detailed guidance for each registration and
+                    approval before submitting updates.
                   </p>
                 </div>
               </div>
@@ -669,7 +627,7 @@ export default function BuyingBusiness() {
               Back
             </button>
 
-            {current !== 'summary' ? (
+            {current !== "summary" ? (
               <button
                 type="button"
                 onClick={next}
@@ -681,9 +639,7 @@ export default function BuyingBusiness() {
             ) : (
               <button
                 type="button"
-                onClick={() =>
-                  navigate('/licensing-guide')
-                }
+                onClick={() => navigate("/licensing-guide")}
                 className="inline-flex items-center gap-3 rounded-md bg-primary px-7 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-secondary"
               >
                 View full summary
@@ -704,16 +660,12 @@ export default function BuyingBusiness() {
             <div className="mt-5 space-y-4">
               <SummaryRow
                 label="Business"
-                value={
-                  business.name || 'Not provided yet'
-                }
+                value={business.name || "Not provided yet"}
               />
 
               <SummaryRow
                 label="Business type"
-                value={
-                  business.type || 'Not selected yet'
-                }
+                value={business.type || "Not selected yet"}
               />
 
               <SummaryRow
@@ -726,7 +678,7 @@ export default function BuyingBusiness() {
                 value={
                   changes.length
                     ? `${changes.length} selected`
-                    : 'None selected'
+                    : "None selected"
                 }
               />
 
@@ -745,11 +697,9 @@ export default function BuyingBusiness() {
             </h3>
 
             <p className="mt-2 text-sm leading-6 text-[#607382]">
-              Existing registrations or approvals do not
-              necessarily mean nothing needs to be
-              changed. Hospo Hub helps identify the
-              items you should review when ownership
-              changes.
+              Existing registrations or approvals do not necessarily mean
+              nothing needs to be changed. Hospo Hub helps identify the items
+              you should review when ownership changes.
             </p>
           </div>
         </aside>
@@ -758,11 +708,7 @@ export default function BuyingBusiness() {
   );
 }
 
-function StepHeading({
-  eyebrow,
-  title,
-  description,
-}) {
+function StepHeading({ eyebrow, title, description }) {
   return (
     <div className="mb-8">
       <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-primary">
@@ -804,12 +750,7 @@ function InfoBox({ children }) {
   );
 }
 
-function ApprovalRow({
-  icon: Icon,
-  title,
-  checked,
-  onChange,
-}) {
+function ApprovalRow({ icon: Icon, title, checked, onChange }) {
   return (
     <div className="flex items-center gap-5 border-b border-[#E8EEF2] px-6 py-5 last:border-0">
       <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-[#EEF7FC] text-lg text-primary">
@@ -825,14 +766,12 @@ function ApprovalRow({
         onClick={onChange}
         aria-pressed={checked}
         className={`relative h-7 w-12 rounded-full transition ${
-          checked
-            ? 'bg-[#0086C9]'
-            : 'bg-[#C8D5DD]'
+          checked ? "bg-[#0086C9]" : "bg-[#C8D5DD]"
         }`}
       >
         <span
           className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${
-            checked ? 'left-6' : 'left-1'
+            checked ? "left-6" : "left-1"
           }`}
         />
       </button>

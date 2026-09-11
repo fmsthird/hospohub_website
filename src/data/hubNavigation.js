@@ -7,6 +7,7 @@ import {
   FaRegEnvelope,
   FaGraduationCap,
   FaCog,
+  FaBell,
 } from "react-icons/fa";
 export const hubLinks = [
   { to: "/dashboard", label: "Dashboard", icon: FaHome },
@@ -15,6 +16,7 @@ export const hubLinks = [
   { to: "/documents", label: "Documents", icon: FaRegFolder },
   { to: "/payments", label: "Payments & Fees", icon: FaCreditCard },
   { to: "/messages", label: "Messages", icon: FaRegEnvelope },
+  { to: "/notifications", label: "Notifications", icon: FaBell },
   { to: "/training", label: "Training", icon: FaGraduationCap },
   { to: "/settings", label: "Settings", icon: FaCog },
 ];

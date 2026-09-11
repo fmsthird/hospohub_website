@@ -1,7 +1,7 @@
-import EstimatedFees, { FeeGuideLink } from '../components/EstimatedFees';
-import SaveRequirements from '../components/SaveRequirements';
-import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import EstimatedFees, { FeeGuideLink } from "../components/EstimatedFees";
+import SaveRequirements from "../components/SaveRequirements";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   FaArrowLeft,
@@ -16,76 +16,71 @@ import {
   FaUsers,
   FaClock,
   FaBuilding,
-} from 'react-icons/fa';
+} from "react-icons/fa";
 
 const STEPS = [
-  { id: 'details', label: 'Current details' },
-  { id: 'changes', label: "What's changing" },
-  { id: 'requirements', label: 'Requirements' },
-  { id: 'summary', label: 'Summary' },
+  { id: "details", label: "Current details" },
+  { id: "changes", label: "What's changing" },
+  { id: "requirements", label: "Requirements" },
+  { id: "summary", label: "Summary" },
 ];
 
 const CHANGE_OPTIONS = [
   {
-    id: 'alcohol',
-    title: 'Add alcohol',
-    description: 'Begin selling or serving alcohol.',
+    id: "alcohol",
+    title: "Add alcohol",
+    description: "Begin selling or serving alcohol.",
     icon: FaGlassMartiniAlt,
   },
   {
-    id: 'outdoor',
-    title: 'Add outdoor dining',
-    description: 'Add outdoor tables or seating.',
+    id: "outdoor",
+    title: "Add outdoor dining",
+    description: "Add outdoor tables or seating.",
     icon: FaUmbrellaBeach,
   },
   {
-    id: 'food',
-    title: 'Change menu / food activities',
-    description: 'Change the type of food prepared or sold.',
+    id: "food",
+    title: "Change menu / food activities",
+    description: "Change the type of food prepared or sold.",
     icon: FaUtensils,
   },
   {
-    id: 'capacity',
-    title: 'Increase seating capacity',
-    description: 'Increase the number of customers or seats.',
+    id: "capacity",
+    title: "Increase seating capacity",
+    description: "Increase the number of customers or seats.",
     icon: FaUsers,
   },
   {
-    id: 'layout',
-    title: 'Renovations / layout changes',
-    description: 'Make physical changes to the premises.',
+    id: "layout",
+    title: "Renovations / layout changes",
+    description: "Make physical changes to the premises.",
     icon: FaBuilding,
   },
   {
-    id: 'hours',
-    title: 'Change trading hours',
-    description: 'Open earlier, later or on different days.',
+    id: "hours",
+    title: "Change trading hours",
+    description: "Open earlier, later or on different days.",
     icon: FaClock,
   },
 ];
 
 const inputClass =
-  'w-full rounded-lg border border-[#C5D5DE] bg-white px-4 py-3 text-sm text-[#203746] outline-none transition focus:border-[#0086C9] focus:ring-2 focus:ring-[#DDF2FC]';
+  "w-full rounded-lg border border-[#C5D5DE] bg-white px-4 py-3 text-sm text-[#203746] outline-none transition focus:border-[#0086C9] focus:ring-2 focus:ring-[#DDF2FC]";
 
 export default function ChangingBusiness() {
   const navigate = useNavigate();
 
-  const [current, setCurrent] = useState('details');
+  const [current, setCurrent] = useState("details");
 
   const [business, setBusiness] = useState({
-    name: '',
-    type: '',
-    location: '',
+    name: "",
+    type: "",
+    location: "",
   });
 
-  const [changes, setChanges] = useState([
-    'alcohol',
-    'outdoor',
-  ]);
+  const [changes, setChanges] = useState(["alcohol", "outdoor"]);
 
-  const currentIndex = STEPS.findIndex(
-    (step) => step.id === current,
-  );
+  const currentIndex = STEPS.findIndex((step) => step.id === current);
 
   const updateBusiness = (field, value) => {
     setBusiness((previous) => ({
@@ -109,62 +104,62 @@ export default function ChangingBusiness() {
   const requirements = useMemo(() => {
     const items = [];
 
-    if (changes.includes('alcohol')) {
+    if (changes.includes("alcohol")) {
       items.push({
-        id: 'alcohol',
-        title: 'Alcohol On Licence',
+        id: "alcohol",
+        title: "Alcohol On Licence",
         description:
-          'You may need an On Licence if alcohol will be sold or served for consumption on the premises.',
+          "You may need an On Licence if alcohol will be sold or served for consumption on the premises.",
         icon: FaGlassMartiniAlt,
       });
     }
 
-    if (changes.includes('outdoor')) {
+    if (changes.includes("outdoor")) {
       items.push({
-        id: 'outdoor',
-        title: 'Outdoor Dining Approval',
+        id: "outdoor",
+        title: "Outdoor Dining Approval",
         description:
-          'Outdoor tables or seating on council-managed public space may require approval.',
+          "Outdoor tables or seating on council-managed public space may require approval.",
         icon: FaUmbrellaBeach,
       });
     }
 
-    if (changes.includes('food')) {
+    if (changes.includes("food")) {
       items.push({
-        id: 'food',
-        title: 'Update food registration',
+        id: "food",
+        title: "Update food registration",
         description:
-          'Review your food registration and food programme if your menu or food activities are changing.',
+          "Review your food registration and food programme if your menu or food activities are changing.",
         icon: FaUtensils,
       });
     }
 
-    if (changes.includes('capacity')) {
+    if (changes.includes("capacity")) {
       items.push({
-        id: 'capacity',
-        title: 'Review premises capacity',
+        id: "capacity",
+        title: "Review premises capacity",
         description:
-          'An increase in seating capacity may affect existing conditions, layouts or other approvals.',
+          "An increase in seating capacity may affect existing conditions, layouts or other approvals.",
         icon: FaUsers,
       });
     }
 
-    if (changes.includes('layout')) {
+    if (changes.includes("layout")) {
       items.push({
-        id: 'layout',
-        title: 'Review premises or layout requirements',
+        id: "layout",
+        title: "Review premises or layout requirements",
         description:
-          'Renovations or physical layout changes may require additional council review.',
+          "Renovations or physical layout changes may require additional council review.",
         icon: FaBuilding,
       });
     }
 
-    if (changes.includes('hours')) {
+    if (changes.includes("hours")) {
       items.push({
-        id: 'hours',
-        title: 'Review trading hours',
+        id: "hours",
+        title: "Review trading hours",
         description:
-          'Changing trading hours may affect existing licence conditions or approvals.',
+          "Changing trading hours may affect existing licence conditions or approvals.",
         icon: FaClock,
       });
     }
@@ -177,27 +172,23 @@ export default function ChangingBusiness() {
    */
 
   const next = () => {
-    const index = STEPS.findIndex(
-      (step) => step.id === current,
-    );
+    const index = STEPS.findIndex((step) => step.id === current);
 
     if (index < STEPS.length - 1) {
       setCurrent(STEPS[index + 1].id);
 
       window.scrollTo({
         top: 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
 
   const back = () => {
-    const index = STEPS.findIndex(
-      (step) => step.id === current,
-    );
+    const index = STEPS.findIndex((step) => step.id === current);
 
     if (index === 0) {
-      navigate('/get-started');
+      navigate("/get-started");
       return;
     }
 
@@ -205,7 +196,7 @@ export default function ChangingBusiness() {
 
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
@@ -215,11 +206,10 @@ export default function ChangingBusiness() {
 
       <button
         type="button"
-        onClick={() => navigate('/get-started')}
+        onClick={() => navigate("/get-started")}
         className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-[#46606F] transition hover:text-primary"
       >
         <FaArrowLeft className="text-xs" />
-
         Back to Get Started
       </button>
 
@@ -236,10 +226,8 @@ export default function ChangingBusiness() {
           </h1>
 
           <p className="mt-3 max-w-[760px] text-[15px] leading-6 text-[#607382]">
-            Tell us what you&apos;re changing and
-            Hospo Hub will help identify which licences,
-            registrations or approvals may need to be
-            updated.
+            Tell us what you&apos;re changing and Hospo Hub will help identify
+            which licences, registrations or approvals may need to be updated.
           </p>
         </div>
 
@@ -285,24 +273,20 @@ export default function ChangingBusiness() {
                 <div
                   className={`flex h-9 w-9 items-center justify-center rounded-full border-2 text-sm font-extrabold transition ${
                     active
-                      ? 'border-[#0086C9] bg-[#0086C9] text-white'
+                      ? "border-[#0086C9] bg-[#0086C9] text-white"
                       : complete
-                        ? 'border-[#0066A1] bg-[#0066A1] text-white'
-                        : 'border-[#C7D6E0] bg-white text-[#718493]'
+                        ? "border-[#0066A1] bg-[#0066A1] text-white"
+                        : "border-[#C7D6E0] bg-white text-[#718493]"
                   }`}
                 >
-                  {complete ? (
-                    <FaCheck className="text-xs" />
-                  ) : (
-                    index + 1
-                  )}
+                  {complete ? <FaCheck className="text-xs" /> : index + 1}
                 </div>
 
                 <span
                   className={`mt-2 text-center text-[11px] font-semibold ${
                     active
-                      ? 'text-primary'
-                      : 'text-[#6B7F8C]'
+                      ? "text-primary"
+                      : "text-[#6B7F8C]"
                   }`}
                 >
                   {step.label}
@@ -323,7 +307,7 @@ export default function ChangingBusiness() {
           {/* STEP 1 - CURRENT DETAILS */}
           {/* ============================= */}
 
-          {current === 'details' && (
+          {current === "details" && (
             <>
               <StepHeading
                 eyebrow="Current details"
@@ -337,10 +321,7 @@ export default function ChangingBusiness() {
                     type="text"
                     value={business.name}
                     onChange={(event) =>
-                      updateBusiness(
-                        'name',
-                        event.target.value,
-                      )
+                      updateBusiness("name", event.target.value)
                     }
                     placeholder="e.g. The Bay Bistro"
                     className={inputClass}
@@ -351,16 +332,11 @@ export default function ChangingBusiness() {
                   <select
                     value={business.type}
                     onChange={(event) =>
-                      updateBusiness(
-                        'type',
-                        event.target.value,
-                      )
+                      updateBusiness("type", event.target.value)
                     }
                     className={inputClass}
                   >
-                    <option value="">
-                      Select business type
-                    </option>
+                    <option value="">Select business type</option>
 
                     <option>Cafe</option>
                     <option>Restaurant</option>
@@ -376,20 +352,13 @@ export default function ChangingBusiness() {
                   <select
                     value={business.location}
                     onChange={(event) =>
-                      updateBusiness(
-                        'location',
-                        event.target.value,
-                      )
+                      updateBusiness("location", event.target.value)
                     }
                     className={inputClass}
                   >
-                    <option value="">
-                      Select location
-                    </option>
+                    <option value="">Select location</option>
 
-                    <option>
-                      Auckland Central
-                    </option>
+                    <option>Auckland Central</option>
 
                     <option>Ponsonby, Auckland</option>
 
@@ -405,9 +374,8 @@ export default function ChangingBusiness() {
               </div>
 
               <InfoBox>
-                We&apos;ll use these business details
-                together with your planned changes to
-                determine what may need to be reviewed.
+                We&apos;ll use these business details together with your planned
+                changes to determine what may need to be reviewed.
               </InfoBox>
             </>
           )}
@@ -416,7 +384,7 @@ export default function ChangingBusiness() {
           {/* STEP 2 - WHAT'S CHANGING */}
           {/* ============================= */}
 
-          {current === 'changes' && (
+          {current === "changes" && (
             <>
               <StepHeading
                 eyebrow="What's changing"
@@ -427,20 +395,17 @@ export default function ChangingBusiness() {
               <div className="grid grid-cols-2 gap-4">
                 {CHANGE_OPTIONS.map((item) => {
                   const Icon = item.icon;
-                  const selected =
-                    changes.includes(item.id);
+                  const selected = changes.includes(item.id);
 
                   return (
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() =>
-                        toggleChange(item.id)
-                      }
+                      onClick={() => toggleChange(item.id)}
                       className={`relative min-h-[135px] rounded-xl border-2 p-5 text-left transition ${
                         selected
-                          ? 'border-[#0086C9] bg-[#F1FAFE] shadow-[0_3px_12px_rgba(0,134,201,0.07)]'
-                          : 'border-[#DFE7EC] bg-white hover:border-[#8CCBEA]'
+                          ? "border-[#0086C9] bg-[#F1FAFE] shadow-[0_3px_12px_rgba(0,134,201,0.07)]"
+                          : "border-[#DFE7EC] bg-white hover:border-[#8CCBEA]"
                       }`}
                     >
                       {/* CHECK BOX */}
@@ -448,13 +413,11 @@ export default function ChangingBusiness() {
                       <div
                         className={`absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded border-2 ${
                           selected
-                            ? 'border-[#0086C9] bg-[#0086C9] text-white'
-                            : 'border-[#B6C8D3] bg-white'
+                            ? "border-[#0086C9] bg-[#0086C9] text-white"
+                            : "border-[#B6C8D3] bg-white"
                         }`}
                       >
-                        {selected && (
-                          <FaCheck className="text-[10px]" />
-                        )}
+                        {selected && <FaCheck className="text-[10px]" />}
                       </div>
 
                       <Icon className="mb-4 text-2xl text-primary" />
@@ -472,10 +435,9 @@ export default function ChangingBusiness() {
               </div>
 
               <InfoBox>
-                Select all relevant changes. Your answers
-                determine which existing approvals should
-                be reviewed and which new approvals may
-                be required.
+                Select all relevant changes. Your answers determine which
+                existing approvals should be reviewed and which new approvals
+                may be required.
               </InfoBox>
             </>
           )}
@@ -484,7 +446,7 @@ export default function ChangingBusiness() {
           {/* STEP 3 - REQUIREMENTS */}
           {/* ============================= */}
 
-          {current === 'requirements' && (
+          {current === "requirements" && (
             <>
               <StepHeading
                 eyebrow="Your requirements"
@@ -534,9 +496,8 @@ export default function ChangingBusiness() {
                   </h3>
 
                   <p className="mt-2 text-sm leading-6 text-[#607382]">
-                    Go back and select the changes you
-                    plan to make so Hospo Hub can suggest
-                    the relevant requirements.
+                    Go back and select the changes you plan to make so Hospo Hub
+                    can suggest the relevant requirements.
                   </p>
                 </div>
               )}
@@ -546,11 +507,9 @@ export default function ChangingBusiness() {
                   <FaInfoCircle className="mt-1 shrink-0 text-primary" />
 
                   <p className="text-sm leading-6 text-[#526A78]">
-                    We&apos;ll guide you through the
-                    relevant requirements based on the
-                    changes you selected. Final
-                    requirements should be confirmed with
-                    Auckland Council.
+                    We&apos;ll guide you through the relevant requirements based
+                    on the changes you selected. Final requirements should be
+                    confirmed with Auckland Council.
                   </p>
                 </div>
               </div>
@@ -561,7 +520,7 @@ export default function ChangingBusiness() {
           {/* STEP 4 - SUMMARY */}
           {/* ============================= */}
 
-          {current === 'summary' && (
+          {current === "summary" && (
             <>
               <StepHeading
                 eyebrow="Summary"
@@ -579,13 +538,11 @@ export default function ChangingBusiness() {
 
                   <div>
                     <h3 className="text-xl font-extrabold text-[#071B2B]">
-                      {business.name ||
-                        'Business name not provided'}
+                      {business.name || "Business name not provided"}
                     </h3>
 
                     <p className="mt-1 text-sm text-[#607382]">
-                      {business.type ||
-                        'Business type not selected'}
+                      {business.type || "Business type not selected"}
                     </p>
 
                     {business.location && (
@@ -607,11 +564,9 @@ export default function ChangingBusiness() {
                 <div className="flex flex-wrap gap-2">
                   {changes.length > 0 ? (
                     changes.map((id) => {
-                      const item =
-                        CHANGE_OPTIONS.find(
-                          (option) =>
-                            option.id === id,
-                        );
+                      const item = CHANGE_OPTIONS.find(
+                        (option) => option.id === id,
+                      );
 
                       return (
                         <span
@@ -649,7 +604,9 @@ export default function ChangingBusiness() {
 
                       <div className="text-sm font-semibold text-[#405966]">
                         {item.title}
-                        <div><FeeGuideLink category={item.id} /></div>
+                        <div>
+                          <FeeGuideLink category={item.id} />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -659,14 +616,20 @@ export default function ChangingBusiness() {
               {/* SUMMARY LOWER GRID */}
 
               <EstimatedFees
-                food={requirements.some((item) => item.id === 'food')}
-                alcohol={requirements.some((item) => item.id === 'alcohol')}
-                outdoor={requirements.some((item) => item.id === 'outdoor')}
+                food={requirements.some((item) => item.id === "food")}
+                alcohol={requirements.some((item) => item.id === "alcohol")}
+                outdoor={requirements.some((item) => item.id === "outdoor")}
                 review
               />
-              <SaveRequirements categories={requirements.map((item) => item.id).filter((id) => ['food', 'alcohol', 'outdoor'].includes(id))} business={business} />
+              <SaveRequirements
+                categories={requirements
+                  .map((item) => item.id)
+                  .filter((id) => ["food", "alcohol", "outdoor"].includes(id))}
+                business={business}
+                scenario="changing-existing-business"
+                answers={{ changes }}
+              />
               <div className="mt-7">
-
                 <div className="rounded-xl border border-[#D7E9F4] bg-[#F2F9FD] p-6">
                   <FaCheckCircle className="text-2xl text-primary" />
 
@@ -675,9 +638,8 @@ export default function ChangingBusiness() {
                   </h3>
 
                   <p className="mt-2 text-sm leading-6 text-[#607382]">
-                    Review the detailed guidance for each
-                    relevant approval before submitting
-                    your changes.
+                    Review the detailed guidance for each relevant approval
+                    before submitting your changes.
                   </p>
                 </div>
               </div>
@@ -693,30 +655,25 @@ export default function ChangingBusiness() {
               className="inline-flex items-center gap-2 rounded-md border border-[#B8CBD6] bg-white px-6 py-3 text-sm font-bold text-[#405966] transition hover:bg-[#F6F9FA]"
             >
               <FaArrowLeft className="text-xs" />
-
               Back
             </button>
 
-            {current !== 'summary' ? (
+            {current !== "summary" ? (
               <button
                 type="button"
                 onClick={next}
                 className="inline-flex items-center gap-3 rounded-md bg-primary px-7 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-secondary"
               >
                 Next
-
                 <FaArrowRight className="text-xs" />
               </button>
             ) : (
               <button
                 type="button"
-                onClick={() =>
-                  navigate('/licensing-guide')
-                }
+                onClick={() => navigate("/licensing-guide")}
                 className="inline-flex items-center gap-3 rounded-md bg-primary px-7 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-secondary"
               >
                 View full summary
-
                 <FaArrowRight className="text-xs" />
               </button>
             )}
@@ -734,26 +691,17 @@ export default function ChangingBusiness() {
             <div className="mt-5 space-y-4">
               <SummaryRow
                 label="Business"
-                value={
-                  business.name ||
-                  'Not provided yet'
-                }
+                value={business.name || "Not provided yet"}
               />
 
               <SummaryRow
                 label="Business type"
-                value={
-                  business.type ||
-                  'Not selected yet'
-                }
+                value={business.type || "Not selected yet"}
               />
 
               <SummaryRow
                 label="Location"
-                value={
-                  business.location ||
-                  'Not selected yet'
-                }
+                value={business.location || "Not selected yet"}
               />
 
               <SummaryRow
@@ -761,7 +709,7 @@ export default function ChangingBusiness() {
                 value={
                   changes.length
                     ? `${changes.length} selected`
-                    : 'None selected'
+                    : "None selected"
                 }
               />
 
@@ -782,18 +730,14 @@ export default function ChangingBusiness() {
             </h3>
 
             <p className="mt-2 text-sm leading-6 text-[#607382]">
-              Use the licensing guide or contact
-              Auckland Council if you&apos;re unsure
-              whether your proposed changes require an
-              update.
+              Use the licensing guide or contact Auckland Council if you&apos;re
+              unsure whether your proposed changes require an update.
             </p>
 
             <div className="mt-5 space-y-2">
               <button
                 type="button"
-                onClick={() =>
-                  navigate('/licensing-guide')
-                }
+                onClick={() => navigate("/licensing-guide")}
                 className="flex w-full items-center justify-between rounded-md border border-[#C6DBE7] bg-white px-4 py-3 text-sm font-bold text-primary transition hover:border-secondary"
               >
                 View Licensing Guide
@@ -802,7 +746,7 @@ export default function ChangingBusiness() {
 
               <button
                 type="button"
-                onClick={() => navigate('/help')}
+                onClick={() => navigate("/help")}
                 className="flex w-full items-center justify-between rounded-md border border-[#C6DBE7] bg-white px-4 py-3 text-sm font-bold text-primary transition hover:border-secondary"
               >
                 Contact us
@@ -820,11 +764,7 @@ export default function ChangingBusiness() {
    SMALL COMPONENTS
 ============================== */
 
-function StepHeading({
-  eyebrow,
-  title,
-  description,
-}) {
+function StepHeading({ eyebrow, title, description }) {
   return (
     <div className="mb-8">
       <p className="text-xs font-extrabold uppercase tracking-[0.1em] text-primary">

@@ -7,11 +7,19 @@ export default function SaveRequirements({
   categories,
   business = {},
   specialLicence = false,
+  scenario = "requirements-check",
+  answers = {},
 }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, currentBusiness } = useAuth();
   const { update, error } = useHub();
   const [saved, setSaved] = useState("");
-  const signature = JSON.stringify({ categories, business, specialLicence });
+  const signature = JSON.stringify({
+    categories,
+    business,
+    specialLicence,
+    scenario,
+    answers,
+  });
   if (!isAuthenticated)
     return (
       <div className="mt-5 rounded-lg border border-blue-100 bg-blue-50 p-5 text-sm">
@@ -22,13 +30,22 @@ export default function SaveRequirements({
           You can continue browsing freely. Sign in to save a checklist from the
           results of your next check.
         </p>
-        <Link to="/login" className="mt-3 inline-block font-bold text-primary">
+        <Link
+          to="/login"
+          className="mt-3 inline-block font-bold text-primary"
+        >
           Sign in →
         </Link>
       </div>
     );
   return (
     <div className="mt-5 rounded-lg border border-blue-100 bg-blue-50 p-5">
+      {currentBusiness && (
+        <p className="mb-3 text-sm text-gray-600">
+          Save this checklist for{" "}
+          <strong>{currentBusiness.businessName}</strong>.
+        </p>
+      )}
       <button
         className="rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white hover:bg-secondary"
         onClick={() => {
@@ -36,9 +53,12 @@ export default function SaveRequirements({
             update((data) => ({
               ...data,
               requirements: {
+                id: data.requirements?.id,
                 categories: [...new Set(categories)],
                 business,
                 specialLicence,
+                scenario,
+                answers,
                 savedAt: new Date().toISOString(),
               },
             }))
@@ -48,7 +68,10 @@ export default function SaveRequirements({
       >
         Save to My Hub
       </button>
-      <p role="status" className="mt-2 text-sm text-gray-600">
+      <p
+        role="status"
+        className="mt-2 text-sm text-gray-600"
+      >
         {saved === signature
           ? "Requirements saved in this browser. Your training and fee estimates are updated."
           : "Save this checklist to update your My Hub requirements."}
@@ -65,6 +88,14 @@ export default function SaveRequirements({
         <p role="alert" className="mt-2 text-sm text-red-700">
           {error}
         </p>
+      )}
+      {!currentBusiness && (
+        <Link
+          to="/profile"
+          className="mt-2 inline-block text-sm font-bold text-primary"
+        >
+          Add your business in My Profile →
+        </Link>
       )}
     </div>
   );

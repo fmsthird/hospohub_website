@@ -1,4 +1,4 @@
-import { formatNZD } from '../utils/formatNZD';
+import { formatNZD } from '../utils/formatNZD.js';
 
 export const FEE_DATA = {
   food: {

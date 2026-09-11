@@ -46,14 +46,7 @@ export default function DocumentUpload() {
         id,
         name: file.name,
         documentType: type,
-        type:
-          type === "Licence"
-            ? "Active licences"
-            : type === "Supporting certificates"
-              ? "Certificates"
-              : type === "Inspection document"
-                ? "Inspection documents"
-                : "Uploaded business records",
+        type: "Supporting documents",
         status: "Uploaded",
         uploadedDate: new Date().toISOString(),
         applicationId,
@@ -143,7 +136,10 @@ export default function DocumentUpload() {
             >
               {busy ? "Saving…" : "Save document locally"}
             </button>
-            <p role="status" className="mt-3 text-sm text-red-700">
+            <p
+              role="status"
+              className="mt-3 text-sm text-red-700"
+            >
               {message}
             </p>
           </div>

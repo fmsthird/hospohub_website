@@ -28,7 +28,7 @@ export const TRAINING_MODULES = [
       "Gather the records relevant to your food programme.",
       "Review any corrective actions with your verifier.",
     ]),
-    guide: "/licensing-guide?guide=verification",
+    guide: "/licensing-guide?guide=food&tab=verification",
   },
   module("host", "alcohol", "Host Responsibility", [
     "Read the alcohol licensing guide.",

@@ -131,7 +131,9 @@ export default function CallbackRequest() {
 
             <label className="text-sm font-semibold text-gray-800">
               Application reference
-              <span className="ml-1 font-normal text-gray-400">(optional)</span>
+              <span className="ml-1 font-normal text-gray-400">
+                (optional)
+              </span>
               <input
                 type="text"
                 value={callback.reference}
@@ -161,10 +163,11 @@ export default function CallbackRequest() {
                 }
                 className="mt-2 w-full rounded-lg border border-slate-300 bg-white p-3 font-normal outline-none transition focus:border-primary focus:ring-2 focus:ring-blue-100"
               >
-                <option>Food registration</option>
+                <option value="Food registration">
+                  Food registration (including verification)
+                </option>
                 <option>Alcohol licensing</option>
                 <option>Outdoor dining</option>
-                <option>Verification</option>
                 <option>Application status</option>
                 <option>Documents</option>
                 <option>Fees and payments</option>

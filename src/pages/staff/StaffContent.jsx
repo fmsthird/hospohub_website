@@ -22,7 +22,9 @@ function ContentPreview({ item }) {
         {item.section} · {item.category}
       </p>
       <h3 className="mt-3 text-2xl font-bold">{item.title || "Untitled"}</h3>
-      <p className="mt-3 text-sm font-medium text-slate-600">{item.summary}</p>
+      <p className="mt-3 text-sm font-medium text-slate-600">
+        {item.summary}
+      </p>
       <div className="mt-5 whitespace-pre-wrap break-words text-sm leading-7">
         {item.body}
       </div>
@@ -237,7 +239,10 @@ export default function StaffContent() {
         }
       >
         {rows.map((item) => (
-          <tr key={item.id} className="hover:bg-slate-50">
+          <tr
+            key={item.id}
+            className="hover:bg-slate-50"
+          >
             <Cell className="min-w-48">
               <strong className="font-semibold">{item.title}</strong>
               <span className="mt-1 block text-xs text-slate-500">

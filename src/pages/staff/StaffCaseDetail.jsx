@@ -62,6 +62,7 @@ export default function StaffCaseDetail() {
   const { data, hasPermission, dispatch } = useStaffAuth();
   const item = data.staffCases.find((row) => row.id === id);
   const [action, setAction] = useState(null);
+  const [actionsOpen, setActionsOpen] = useState(false);
   const [preview, setPreview] = useState(null);
   const [message, setMessage] = useState("");
   if (!item)
@@ -70,7 +71,10 @@ export default function StaffCaseDetail() {
         <p className="mb-4 text-sm text-slate-500">
           This reference is not in the local staff workspace.
         </p>
-        <Link to="/staff/cases" className="font-semibold text-primary">
+        <Link
+          to="/staff/cases"
+          className="font-semibold text-primary"
+        >
           Back to cases
         </Link>
       </Panel>
@@ -108,7 +112,21 @@ export default function StaffCaseDetail() {
         {item.id} · {item.type} · Assigned to{" "}
         {getStaffName(data, item.assignedOfficerId)}
       </PageHeading>
-      <div className="mb-6 flex flex-wrap gap-2">
+      {(hasPermission("cases:assign") || hasPermission("cases:update")) && (
+        <Button
+          secondary
+          className="mb-3 lg:hidden"
+          aria-expanded={actionsOpen}
+          aria-controls="case-actions"
+          onClick={() => setActionsOpen(!actionsOpen)}
+        >
+          Actions
+        </Button>
+      )}
+      <div
+        id="case-actions"
+        className={`mb-6 ${actionsOpen ? "flex" : "hidden"} flex-col gap-2 sm:flex-row sm:flex-wrap lg:flex`}
+      >
         {hasPermission("cases:assign") && (
           <Button onClick={() => setAction("assign")}>Assign</Button>
         )}
@@ -139,7 +157,9 @@ export default function StaffCaseDetail() {
               <dl className="grid gap-5 sm:grid-cols-2">
                 {summary.map(([label, value]) => (
                   <div key={label}>
-                    <dt className="text-xs text-slate-500">{label}</dt>
+                    <dt className="text-xs text-slate-500">
+                      {label}
+                    </dt>
                     <dd className="mt-1 break-words text-sm font-medium">
                       {label === "Assigned officer" &&
                       item.assignedOfficerId &&
@@ -162,7 +182,10 @@ export default function StaffCaseDetail() {
               {item.notes.length ? (
                 <ul className="space-y-4">
                   {item.notes.map((note) => (
-                    <li key={note.id} className="rounded-lg bg-amber-50 p-4">
+                    <li
+                      key={note.id}
+                      className="rounded-lg bg-amber-50 p-4"
+                    >
                       <p className="whitespace-pre-wrap break-words text-sm">
                         {note.text}
                       </p>
@@ -213,7 +236,9 @@ export default function StaffCaseDetail() {
               className="mb-2 rounded-lg bg-slate-50 p-4 text-sm"
             >
               <strong>{answer.question}</strong>
-              <p className="mt-1 text-slate-600">{answer.answer}</p>
+              <p className="mt-1 text-slate-600">
+                {answer.answer}
+              </p>
             </div>
           ))}
         </Panel>
@@ -238,7 +263,10 @@ export default function StaffCaseDetail() {
             }
           >
             {item.documents.map((doc) => (
-              <tr key={doc.id} className="hover:bg-slate-50">
+              <tr
+                key={doc.id}
+                className="hover:bg-slate-50"
+              >
                 <Cell className="min-w-40">{doc.name}</Cell>
                 <Cell>{doc.type}</Cell>
                 <Cell>{formatStaffDate(doc.uploadedAt)}</Cell>

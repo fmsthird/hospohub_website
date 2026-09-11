@@ -21,15 +21,30 @@ export function Panel({ title, children, className = "" }) {
     <section
       className={`rounded-xl border border-[#dde8ef] bg-white p-5 shadow-sm ${className}`}
     >
-      {title && <h2 className="mb-4 font-bold text-[#173346]">{title}</h2>}
+      {title && (
+        <h2 className="mb-4 font-bold text-[#173346]">
+          {title}
+        </h2>
+      )}
       {children}
     </section>
   );
 }
 export function Status({ children }) {
-  const color = ["Approved", "Active", "Completed", "Paid"].includes(children)
+  const color = [
+    "Approved",
+    "Accepted",
+    "Active",
+    "Completed",
+    "Paid",
+  ].includes(children)
     ? "bg-green-100 text-green-800"
-    : ["Action required", "Declined"].includes(children)
+    : [
+          "Action required",
+          "Update required",
+          "Payment required",
+          "Declined",
+        ].includes(children)
       ? "bg-red-100 text-red-800"
       : children === "Draft"
         ? "bg-slate-100 text-slate-700"

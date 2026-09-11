@@ -3,16 +3,19 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { FaBars, FaBell, FaTimes } from "react-icons/fa";
 import { hubLinks } from "../data/hubNavigation";
 import { useHub } from "../hooks/useHub";
+import { useAuth } from "../hooks/useAuth";
 import UserMenu from "../components/UserMenu";
 import logo from "../assets/logo.svg";
 export default function DashboardLayout({ children }) {
   const [open, setOpen] = useState(false);
   const { data, error } = useHub();
+  const { businesses = [], currentBusiness, selectBusiness } = useAuth();
+  const [selectionError, setSelectionError] = useState("");
   const { pathname } = useLocation();
   useLayoutEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [pathname]);
-  const unread = data.messages.filter((item) => !item.read).length;
+  const unread = (data.notifications || []).filter((item) => !item.read).length;
   return (
     <div className="min-h-screen bg-[#f3f8fc] text-[#173346]">
       <header className="sticky top-0 z-40 flex min-h-20 flex-wrap items-center justify-between gap-3 border-b border-[#dce7ef] bg-white px-4 py-3 sm:px-6">
@@ -32,8 +35,8 @@ export default function DashboardLayout({ children }) {
         </Link>
         <div className="ml-auto flex items-center gap-2 sm:gap-5">
           <Link
-            to="/messages"
-            aria-label={`Messages, ${unread} unread`}
+            to="/notifications"
+            aria-label={`Notifications, ${unread} unread`}
             className="relative rounded-lg p-3 text-[#66869a] hover:bg-blue-50"
           >
             <FaBell />
@@ -60,6 +63,39 @@ export default function DashboardLayout({ children }) {
           id="hub-sidebar"
           className={`${open ? "block" : "hidden"} border-b border-[#dce7ef] bg-white p-4 md:sticky md:top-20 md:block md:h-[calc(100dvh-5rem)] md:w-56 md:shrink-0 md:overflow-y-auto md:border-b-0 md:border-r`}
         >
+          {businesses.length > 1 ? (
+            <label className="mb-4 block text-xs font-bold">
+              Selected business
+              <select
+                aria-label="Selected business"
+                value={currentBusiness?.id || ""}
+                onChange={(event) => {
+                  try {
+                    selectBusiness(event.target.value);
+                    setSelectionError("");
+                  } catch (error) {
+                    setSelectionError(error.message);
+                  }
+                }}
+                className="mt-2 w-full rounded-lg border bg-white p-2 text-sm font-normal"
+              >
+                {businesses.map((business) => (
+                  <option key={business.id} value={business.id}>
+                    {business.businessName}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : (
+            <p className="mb-4 break-words text-sm font-bold">
+              {currentBusiness?.businessName || "Your business workspace"}
+            </p>
+          )}
+          {selectionError && (
+            <p role="alert" className="text-sm text-red-700">
+              {selectionError}
+            </p>
+          )}
           <nav aria-label="My Hub" className="grid gap-1">
             {hubLinks.map(({ to, label, icon: Icon }) => (
               <NavLink
@@ -92,6 +128,18 @@ export default function DashboardLayout({ children }) {
               className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700"
             >
               {error}
+            </p>
+          )}
+          {!currentBusiness && (
+            <p className="mb-4 text-sm">
+              Add your business details in{" "}
+              <Link
+                to="/profile"
+                className="font-bold text-primary underline"
+              >
+                My Profile
+              </Link>{" "}
+              to start saving business records.
             </p>
           )}
           {children}

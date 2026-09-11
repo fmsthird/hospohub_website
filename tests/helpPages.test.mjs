@@ -92,7 +92,6 @@ test("complete content was retained in shared data", () => {
     [
       "Getting Started",
       "Food Business",
-      "Verification",
       "Alcohol Licensing",
       "Outdoor Dining",
       "Fees & Payments",
@@ -154,7 +153,7 @@ test("callback prefill and application suggestions are only exposed to authentic
     "Morning",
     "Afternoon",
     "No preference",
-    "Verification",
+    "Food registration (including verification)",
     "Fees and payments",
   ])
     assert.ok(account.includes(value));

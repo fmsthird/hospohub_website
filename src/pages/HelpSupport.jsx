@@ -36,7 +36,9 @@ export default function HelpSupport() {
             Guided help
           </p>
 
-          <h2 className="text-xl font-bold text-gray-900">AI assistant</h2>
+          <h2 className="text-xl font-bold text-gray-900">
+            AI assistant
+          </h2>
 
           <p className="mt-3 flex-1 text-sm leading-6 text-gray-600">
             Get instant answers to common questions about licences,
@@ -88,7 +90,9 @@ export default function HelpSupport() {
             Self-service
           </p>
 
-          <h2 className="text-xl font-bold text-gray-900">FAQs & glossary</h2>
+          <h2 className="text-xl font-bold text-gray-900">
+            FAQs & glossary
+          </h2>
 
           <p className="mt-3 flex-1 text-sm leading-6 text-gray-600">
             Browse common questions and understand important hospitality

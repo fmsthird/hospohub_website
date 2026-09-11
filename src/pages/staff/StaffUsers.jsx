@@ -268,7 +268,10 @@ export default function StaffUsers() {
         empty={!rows.length && "No staff users found."}
       >
         {rows.map((user) => (
-          <tr key={user.id} className="hover:bg-slate-50">
+          <tr
+            key={user.id}
+            className="hover:bg-slate-50"
+          >
             <Cell>
               <button
                 type="button"
@@ -338,7 +341,9 @@ export default function StaffUsers() {
                     ["Phone", selected.phone || "Not recorded"],
                   ].map(([label, value]) => (
                     <div key={label}>
-                      <dt className="text-xs text-slate-500">{label}</dt>
+                      <dt className="text-xs text-slate-500">
+                        {label}
+                      </dt>
                       <dd className="break-words">{value}</dd>
                     </div>
                   ))}

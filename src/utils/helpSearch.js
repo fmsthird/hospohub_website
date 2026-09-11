@@ -49,6 +49,7 @@ export function readContentFilters(params, kind = "help") {
   const categoryAliases = isHelp
     ? {
         food: "Food Business",
+        verification: "Food Business",
         alcohol: "Alcohol Licensing",
         outdoor: "Outdoor Dining",
         fees: "Fees & Payments",
@@ -56,6 +57,7 @@ export function readContentFilters(params, kind = "help") {
         help: "Help & Support",
       }
     : {
+        verification: "Food",
         outdoor: "Outdoor Dining",
         safety: "Health & Safety",
         business: "Business & Council",
@@ -67,7 +69,12 @@ export function readContentFilters(params, kind = "help") {
   const rawCategory = params.get("category") || "";
   const type = params.get("type") || "";
   return {
-    search: params.get("search") || "",
+    search:
+      params.get("search") ||
+      (slug(rawCategory) === "verification" ||
+      slug(params.get("service") || "") === "verification"
+        ? "verification"
+        : ""),
     category:
       categoryAliases[rawCategory.toLowerCase()] ||
       resolve(rawCategory, isHelp ? HELP_CATEGORIES : RESOURCE_CATEGORIES),
@@ -76,7 +83,14 @@ export function readContentFilters(params, kind = "help") {
           type.toLowerCase()
         ] || "faqs"
       : resolve(type, RESOURCE_TYPES),
-    service: isHelp ? resolve(params.get("service"), HELP_SERVICES) : "",
+    service: isHelp
+      ? resolve(
+          params.get("service")?.toLowerCase() === "verification"
+            ? "Food"
+            : params.get("service"),
+          HELP_SERVICES,
+        )
+      : "",
     letter:
       isHelp &&
       type.toLowerCase() === "glossary" &&

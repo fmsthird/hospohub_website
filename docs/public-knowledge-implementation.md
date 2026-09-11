@@ -4,9 +4,9 @@ The public support routes remain separate: `/help`, `/help/assistant`, `/help/ca
 
 ## Content
 
-- `src/data/helpFaqs.js`: 125 questions with complete answers across all 11 requested categories, stable IDs, services, keywords, related links and resource IDs.
+- `src/data/helpFaqs.js`: 125 questions with complete answers across 10 categories, stable IDs, services, keywords, related links and resource IDs. Verification questions are grouped under Food Business.
 - `src/data/helpGlossary.js`: 32 structured, alphabetically sorted terms with definitions, keywords and related information.
-- `src/data/resources.js`: 57 resource records across nine categories and all six resource types. These are directory entries pointing to existing guides, learning pages, FAQ answers and official sources rather than duplicated guide content.
+- `src/data/resources.js`: 57 resource records across eight categories and all six resource types. Verification resources are grouped under Food. These are directory entries pointing to existing guides, learning pages, FAQ answers and official sources rather than duplicated guide content.
 - `src/data/helpCategories.js`: category names, service mapping and shared related-link defaults.
 
 NP1–3 official cards reuse `NATIONAL_PROGRAMME_REFERENCES` from the existing data file. Related FAQ resources resolve by ID, so their titles and destinations remain centralised. Product answers explain the actual prototype behaviour, including local submissions, simulated payments, document storage, training records and callback downloads.

@@ -44,8 +44,81 @@ const filtered = (query) => {
   return filterHelpTopics(topics, filters.search, filters);
 };
 
+test("verification keeps its FAQ IDs, resources and definitions under Food", () => {
+  const moved = helpFaqs.filter((item) => item.id.startsWith("verification-"));
+  assert.equal(moved.length, 11);
+  assert.equal(helpFaqs.length, 125);
+  assert.equal(helpGlossary.length, 32);
+  assert.equal(resources.length, 57);
+  for (const item of moved) {
+    assert.equal(item.category, "Food Business");
+    assert.equal(item.service, "Food");
+    assert.equal(
+      item.relatedLinks[0].to,
+      "/licensing-guide?guide=food&tab=verification",
+    );
+  }
+  for (const id of [
+    "verification-guide",
+    "verification-preparation",
+    "verification-records",
+    "verification-corrective-actions",
+    "food-verification",
+  ])
+    assert.equal(resourcesById[id].category, "Food");
+  for (const term of ["Verification", "Verifier", "Corrective action"])
+    assert.equal(
+      helpGlossary.find((item) => item.term === term).category,
+      "Food Business",
+    );
+  for (const categories of [
+    HELP_CATEGORIES,
+    HELP_SERVICES,
+    RESOURCE_CATEGORIES,
+  ])
+    assert.ok(!categories.includes("Verification"));
+  assert.ok(
+    filterHelpTopics(helpFaqs, "verification", {
+      category: "Food Business",
+      service: "Food",
+    }).length >= 11,
+  );
+  assert.ok(
+    filterHelpTopics(resources, "verification", { category: "Food" }).length >=
+      5,
+  );
+});
+
+test("legacy verification filters keep finding food guidance", () => {
+  for (const kind of ["help", "resources"]) {
+    const filters = readContentFilters(
+      new URLSearchParams("category=Verification"),
+      kind,
+    );
+    assert.equal(filters.category, kind === "help" ? "Food Business" : "Food");
+    assert.equal(filters.search, "verification");
+    assert.ok(
+      filterHelpTopics(
+        kind === "help" ? topics : resources,
+        filters.search,
+        filters,
+      ).length > 0,
+    );
+  }
+  assert.equal(
+    readContentFilters(new URLSearchParams("service=Verification")).service,
+    "Food",
+  );
+  assert.equal(
+    readContentFilters(
+      new URLSearchParams("category=verification&search=corrective"),
+    ).search,
+    "corrective",
+  );
+});
+
 test("all requested knowledge categories have complete answers, stable IDs and valid resource references", () => {
-  const minimums = [9, 12, 11, 15, 12, 13, 14, 10, 10, 10, 9];
+  const minimums = [9, 23, 15, 12, 13, 14, 10, 10, 10, 9];
   HELP_CATEGORIES.forEach((category, index) =>
     assert.ok(
       helpFaqs.filter((item) => item.category === category).length >=
@@ -256,9 +329,7 @@ test("all internal library links resolve to existing public routes and FAQ links
       );
     if (url.searchParams.has("guide"))
       assert.ok(
-        ["food", "alcohol", "outdoor", "verification"].includes(
-          url.searchParams.get("guide"),
-        ),
+        ["food", "alcohol", "outdoor"].includes(url.searchParams.get("guide")),
       );
   }
   for (let index = 0; index < 3; index++)

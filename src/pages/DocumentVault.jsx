@@ -11,12 +11,21 @@ import {
   Status,
 } from "../components/HubUI";
 import { Link } from "react-router-dom";
+import { vaultRecords, licenceReminders } from "../services/customerSelectors";
 export default function DocumentVault() {
   const { user } = useAuth();
   const { data } = useHub();
   const [message, setMessage] = useState("");
   const [selected, setSelected] = useState(null);
   const [today] = useState(() => Date.now());
+  const records = [
+    ...vaultRecords(data),
+    ...data.documents.map((item) => ({
+      ...item,
+      type: "Supporting documents",
+    })),
+  ];
+  const reminders = licenceReminders(data);
   const open = async (record, download = false) => {
     if (record.completionText) {
       if (download) downloadText(`${record.name}.txt`, record.completionText);
@@ -69,28 +78,27 @@ export default function DocumentVault() {
         title="Document Vault"
         action={<ActionLink to="/document-upload">Add document</ActionLink>}
       >
-        Licences, certificates, inspection documents and business records, kept
-        in your browser workspace.
+        Final licences, registrations and training records are separate from
+        supporting uploads. Sample metadata has no attached official file.
       </PageHeading>
       <p role="status" className="mb-4 text-sm text-primary">
         {message}
       </p>
-      {data.preferences.reminders && (
-        <Panel title="Expiry & renewal reminders" className="mb-5">
-          {data.documents.filter((item) => item.expiryDate).length ? (
-            data.documents
-              .filter((item) => item.expiryDate)
-              .map((item) => {
+      {data.preferences.reminders &&
+        data.preferences.renewalReminders !== false && (
+          <Panel title="Expiry & renewal reminders" className="mb-5">
+            {reminders.length ? (
+              reminders.map((item) => {
                 const days = Math.ceil(
-                  (Date.parse(item.expiryDate) - today) / 86400000,
+                  (Date.parse(item.dueDate) - today) / 86400000,
                 );
                 return (
                   <div key={item.id} className="mb-3 text-sm">
-                    <strong>{item.name}</strong>:{" "}
+                    <strong>{item.title}</strong>:{" "}
                     {days < 0
                       ? "Recorded date has passed"
                       : `Expiry / review in ${days} days`}{" "}
-                    • <DateText value={item.expiryDate} />
+                    • <DateText value={item.dueDate} />
                     {item.demo && " (sample)"}{" "}
                     <Link
                       to="/licensing-guide"
@@ -101,21 +109,20 @@ export default function DocumentVault() {
                   </div>
                 );
               })
-          ) : (
-            <Empty>No renewal date recorded.</Empty>
-          )}
-        </Panel>
-      )}
+            ) : (
+              <Empty>No renewal date recorded.</Empty>
+            )}
+          </Panel>
+        )}
       <div className="space-y-5">
         {[
-          "Active licences",
-          "Certificates",
-          "Uploaded business records",
-          "Inspection documents",
+          "Licences and registrations",
           "Training completion records",
+          "Approved records",
+          "Supporting documents",
         ].map((category) => (
           <Panel key={category} title={category}>
-            {data.documents
+            {records
               .filter((item) => item.type === category)
               .map((record) => (
                 <div
@@ -141,6 +148,24 @@ export default function DocumentVault() {
                       <br />
                       Expiry / review: <DateText value={record.expiryDate} />
                     </p>
+                    {record.reference && (
+                      <p className="mt-2 text-xs text-slate-600">
+                        Reference: {record.reference}
+                      </p>
+                    )}
+                    {record.note && (
+                      <p className="mt-2 max-w-xl text-xs leading-5 text-slate-600">
+                        {record.note}
+                      </p>
+                    )}
+                    {record.applicationId && (
+                      <Link
+                        to={`/my-applications/${record.applicationId}`}
+                        className="mt-2 inline-block text-sm text-primary"
+                      >
+                        View application →
+                      </Link>
+                    )}
                   </div>
                   <div className="flex flex-wrap gap-3 text-sm font-semibold text-primary">
                     <button onClick={() => open(record)}>View</button>
@@ -155,7 +180,7 @@ export default function DocumentVault() {
                   </div>
                 </div>
               ))}
-            {!data.documents.some((item) => item.type === category) && (
+            {!records.some((item) => item.type === category) && (
               <Empty>No records in this category.</Empty>
             )}
           </Panel>

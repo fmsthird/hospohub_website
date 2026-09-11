@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from "../hooks/useAuth";
 import {
   FaBookOpen,
   FaUtensils,
@@ -21,7 +21,7 @@ export default function LearningCentre() {
       title: "Food Safety & Registration",
       eyebrow: "Food businesses",
       description:
-        "Understand the food safety, registration and verification responsibilities that apply to hospitality businesses.",
+        "Learn about food registration, Food Control Plans, National Programmes, verification and preparing for compliance checks.",
       topics: [
         "Food business registration",
         "Food Control Plans & National Programmes",
@@ -125,20 +125,34 @@ export default function LearningCentre() {
 
   return (
     <div className="w-full">
-
       {/* ================================================= */}
-      {isAuthenticated && <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-blue-200 bg-blue-50 p-5"><div><h2 className="font-bold text-primary">Your assigned training</h2><p className="mt-1 text-sm text-gray-600">Continue modules and view completion records in My Hub.</p></div><Link to="/training" className="rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white">Open training</Link></div>}
+      {isAuthenticated && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-blue-200 bg-blue-50 p-5">
+          <div>
+            <h2 className="font-bold text-primary">
+              Your assigned training
+            </h2>
+            <p className="mt-1 text-sm text-gray-600">
+              Continue modules and view completion records in My Hub.
+            </p>
+          </div>
+          <Link
+            to="/training"
+            className="rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white"
+          >
+            Open training
+          </Link>
+        </div>
+      )}
       {/* HERO */}
       {/* ================================================= */}
 
       <section className="relative mb-12 overflow-hidden rounded-[28px] bg-[#062c48] px-7 py-12 text-white md:px-12 md:py-14">
-
         {/* Decorative circles */}
         <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full bg-cyan-400/10" />
         <div className="absolute -bottom-28 right-40 h-64 w-64 rounded-full bg-blue-400/10" />
 
         <div className="relative z-10 grid gap-10 lg:grid-cols-[1.35fr_0.65fr] lg:items-center">
-
           <div>
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-blue-50">
               <FaBookOpen />
@@ -172,17 +186,13 @@ export default function LearningCentre() {
             </div>
           </div>
 
-
           {/* RIGHT INFO CARD */}
           <div className="rounded-2xl border border-white/15 bg-white/10 p-6 backdrop-blur-sm">
-
             <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 text-lg">
               <FaLightbulb />
             </div>
 
-            <h2 className="text-lg font-bold">
-              Use this as a reference
-            </h2>
+            <h2 className="text-lg font-bold">Use this as a reference</h2>
 
             <p className="mt-2 text-sm leading-6 text-blue-100">
               The Learning Centre does not track progress or require you to
@@ -191,8 +201,6 @@ export default function LearningCentre() {
             </p>
 
             <div className="mt-5 border-t border-white/15 pt-5">
-
-
               <div className="mb-3 flex items-center gap-3 text-sm">
                 <FaCheckCircle className="text-cyan-300" />
                 No course completion
@@ -202,13 +210,10 @@ export default function LearningCentre() {
                 <FaCheckCircle className="text-cyan-300" />
                 Official reference links included
               </div>
-
             </div>
           </div>
-
         </div>
       </section>
-
 
       {/* ================================================= */}
       {/* INTRO */}
@@ -216,7 +221,6 @@ export default function LearningCentre() {
 
       <section className="mb-8">
         <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-
           <div className="max-w-2xl">
             <p className="mb-2 text-sm font-bold uppercase tracking-[0.18em] text-primary">
               Learning Centre
@@ -236,29 +240,23 @@ export default function LearningCentre() {
           <div className="rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600">
             5 reference topics
           </div>
-
         </div>
       </section>
-
 
       {/* ================================================= */}
       {/* FEATURED 3 CARDS */}
       {/* ================================================= */}
 
       <section className="mb-8 grid gap-6 xl:grid-cols-3">
-
         {modules.slice(0, 3).map((module, index) => (
           <article
             key={index}
             className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
           >
-
             <div className={`h-1.5 w-full ${module.accent}`} />
 
             <div className="p-6">
-
               <div className="mb-5 flex items-start justify-between">
-
                 <div
                   className={`flex h-12 w-12 items-center justify-center rounded-xl text-xl ${module.iconBg} ${module.iconText}`}
                 >
@@ -268,7 +266,6 @@ export default function LearningCentre() {
                 <span className="rounded-full bg-gray-100 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-gray-500">
                   Reference
                 </span>
-
               </div>
 
               <p className="mb-2 text-xs font-bold uppercase tracking-[0.15em] text-gray-400">
@@ -283,10 +280,8 @@ export default function LearningCentre() {
                 {module.description}
               </p>
 
-
               {/* TOPICS */}
               <div className="mt-6 rounded-xl bg-gray-50 p-4">
-
                 <p className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-500">
                   Key topics
                 </p>
@@ -305,13 +300,10 @@ export default function LearningCentre() {
                     </li>
                   ))}
                 </ul>
-
               </div>
-
 
               {/* ACTIONS */}
               <div className="mt-6 flex flex-col gap-3 border-t border-gray-100 pt-5">
-
                 {module.internalLink && (
                   <Link
                     to={module.internalLink}
@@ -332,31 +324,23 @@ export default function LearningCentre() {
                   Official reference
                   <FaExternalLinkAlt className="text-[10px]" />
                 </a>
-
               </div>
-
             </div>
-
           </article>
         ))}
-
       </section>
-
 
       {/* ================================================= */}
       {/* SECONDARY TOPICS */}
       {/* ================================================= */}
 
       <section className="grid gap-6 lg:grid-cols-2">
-
         {modules.slice(3).map((module, index) => (
           <article
             key={index}
             className="group rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:border-gray-300 hover:shadow-lg"
           >
-
             <div className="flex flex-col gap-5 sm:flex-row">
-
               <div
                 className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-xl ${module.iconBg} ${module.iconText}`}
               >
@@ -364,7 +348,6 @@ export default function LearningCentre() {
               </div>
 
               <div className="flex-1">
-
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-gray-400">
                   {module.eyebrow}
                 </p>
@@ -378,7 +361,6 @@ export default function LearningCentre() {
                 </p>
 
                 <div className="mt-5 grid gap-2 sm:grid-cols-2">
-
                   {module.topics.map((topic, topicIndex) => (
                     <div
                       key={topicIndex}
@@ -391,11 +373,9 @@ export default function LearningCentre() {
                       {topic}
                     </div>
                   ))}
-
                 </div>
 
                 <div className="mt-6 flex flex-wrap items-center gap-5">
-
                   {module.internalLink && (
                     <Link
                       to={module.internalLink}
@@ -415,31 +395,22 @@ export default function LearningCentre() {
                     Official reference
                     <FaExternalLinkAlt className="text-[10px]" />
                   </a>
-
                 </div>
-
               </div>
-
             </div>
-
           </article>
         ))}
-
       </section>
-
 
       {/* ================================================= */}
       {/* BOTTOM CTA */}
       {/* ================================================= */}
 
       <section className="relative mt-12 overflow-hidden rounded-2xl border border-blue-100 bg-[#eef7fc] p-7 md:p-9">
-
         <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-200/30" />
 
         <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
-
           <div className="max-w-2xl">
-
             <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-primary">
               Not sure where to start?
             </p>
@@ -452,7 +423,6 @@ export default function LearningCentre() {
               Tell us what type of hospitality business you are operating and
               the activities you plan to provide.
             </p>
-
           </div>
 
           <Link
@@ -462,11 +432,8 @@ export default function LearningCentre() {
             Check my requirements
             <FaArrowRight />
           </Link>
-
         </div>
-
       </section>
-
     </div>
   );
 }

@@ -33,28 +33,28 @@ export default function StaffLogin() {
     }
   };
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-[#f3f8fc] p-4 sm:p-8">
+    <main className="staff-login flex min-h-dvh items-center justify-center bg-[#f3f8fc] p-4 sm:p-8">
       <div className="grid w-full max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg md:grid-cols-[.9fr_1.1fr]">
-        <section className="relative overflow-hidden bg-[#063B5A] p-7 text-white sm:p-10">
+        <section className="relative overflow-hidden bg-[#063B5A] p-5 text-white md:p-10">
           <Link to="/" className="relative z-10 flex items-center gap-3">
             <img src={logo} className="h-12 w-12" alt="" />
             <strong className="text-xl">Hospo Hub</strong>
           </Link>
-          <div className="relative z-10 mt-8 md:mt-16">
-            <FaShieldAlt className="mb-4 text-3xl text-sky-300" />
-            <h1 className="text-3xl font-bold">Staff Portal</h1>
-            <p className="mt-4 max-w-xs text-sm leading-6 text-sky-100">
+          <div className="relative z-10 mt-4 md:mt-16">
+            <FaShieldAlt className="mb-4 hidden text-3xl text-sky-300 md:block" />
+            <h1 className="text-2xl font-bold md:text-3xl">Staff Portal</h1>
+            <p className="mt-4 hidden max-w-xs text-sm leading-6 text-sky-100 md:block">
               One place to review cases, manage your work and support
               hospitality businesses.
             </p>
-            <p className="mt-5 text-xs text-sky-200">
+            <p className="mt-5 hidden text-xs text-sky-200 md:block">
               Food · Alcohol · Outdoor dining
             </p>
           </div>
           <img
             src={skyline}
             alt=""
-            className="absolute bottom-0 left-0 w-full opacity-15"
+            className="absolute bottom-0 left-0 hidden w-full opacity-15 md:block"
           />
         </section>
         <section className="p-6 sm:p-9">
@@ -76,7 +76,10 @@ export default function StaffLogin() {
           </div>
           <form onSubmit={submit} className="space-y-4">
             {(error || storageError) && (
-              <p role="alert" className="text-sm text-red-700">
+              <p
+                role="alert"
+                className="text-sm text-red-700"
+              >
                 {error || storageError}
               </p>
             )}
@@ -170,7 +173,9 @@ export default function StaffLogin() {
                   className="rounded-lg border p-3 text-left text-xs hover:border-sky-400 hover:bg-sky-50"
                 >
                   <strong className="block text-sm">{name}</strong>
-                  <span className="block text-slate-500">{role}</span>
+                  <span className="block text-slate-500">
+                    {role}
+                  </span>
                   <span className="mt-1 block break-all text-[10px] text-primary">
                     {address}
                   </span>

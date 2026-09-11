@@ -41,11 +41,13 @@ export default function StaffUserMenu() {
           <strong className="block text-sm">
             {staffUser.firstName} {staffUser.lastName}
           </strong>
-          <span className="block text-xs text-slate-500">{staffUser.role}</span>
+          <span className="block text-xs text-slate-500">
+            {staffUser.role}
+          </span>
         </span>
-        <FaChevronDown className="text-xs text-slate-500" />
+        <FaChevronDown className="hidden text-xs text-slate-500 sm:block" />
       </summary>
-      <div className="absolute right-0 top-full z-50 mt-2 w-60 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+      <div className="absolute right-0 top-full z-50 mt-2 w-60 max-w-[calc(100vw-1.5rem)] rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
         <p className="border-b px-3 py-2 text-xs text-slate-500 sm:hidden">
           {staffUser.firstName} {staffUser.lastName} · {staffUser.role}
         </p>
